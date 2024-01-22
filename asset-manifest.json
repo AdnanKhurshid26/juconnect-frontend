@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/juconnect-frontend/static/css/main.f5609149.css",
+    "main.js": "/juconnect-frontend/static/js/main.0dc2bdf6.js",
+    "static/media/logo.png": "/juconnect-frontend/static/media/logo.133647202ad43c9c3748.png",
+    "index.html": "/juconnect-frontend/index.html",
+    "main.f5609149.css.map": "/juconnect-frontend/static/css/main.f5609149.css.map",
+    "main.0dc2bdf6.js.map": "/juconnect-frontend/static/js/main.0dc2bdf6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f5609149.css",
+    "static/js/main.0dc2bdf6.js"
+  ]
+}
