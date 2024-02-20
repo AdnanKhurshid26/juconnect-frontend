@@ -9,6 +9,7 @@ module.exports = {
         "backg-light":"#fbfaea",
         "red-primary":"#ae320c",
         "orange-primary":"#fc9b00",
+        "orange-dark":"#de4a0e"
       }
     },
   },
