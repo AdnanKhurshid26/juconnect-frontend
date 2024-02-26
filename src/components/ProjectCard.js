@@ -3,7 +3,7 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 
 const ProjectCard = () => {
   return (
-    <div className="flex flex-col bg-orange-dark p-4 rounded-md gap-3 text-white w-full">
+    <div className="flex flex-col bg-orange-dark p-4 rounded-md gap-3 text-white w-full min-w-80">
       <div className="flex flex-row gap-2 items-center justify-start ">
         <img
           src={require("../assets/james.jpg")}
