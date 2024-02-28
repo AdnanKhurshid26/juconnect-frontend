@@ -63,7 +63,7 @@ const Notifications = () => {
   return (
     <div>
       <Header headertext="Notifications" />
-      <div className="min-h-screen flex flex-col w-full border border-red-500">
+      <div className="min-h-screen flex flex-col w-full">
         {notifs.map((notif, index) => (
           <NotificationCard
             key={index}

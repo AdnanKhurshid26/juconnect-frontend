@@ -11,7 +11,7 @@ const Header = ({headertext}) => {
   };
 
   return (
-    <div className="flex flex-row justify-between items-center w-full border-b border-neutral-300 px-4 py-2 sticky bg-white top-0">
+    <div className="flex flex-row justify-between items-center w-full border-b border-neutral-300 px-4 py-2 sticky bg-white top-0 h-16">
       <button onClick={handleGoBack}>
         <IoArrowBack className="w-full h-10" />
       </button>

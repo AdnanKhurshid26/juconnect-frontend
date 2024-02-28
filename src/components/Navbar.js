@@ -13,7 +13,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="bottom-0 w-full border-t-2  border-gray-400 bg-white z-10 flex flex-row gap-4 justify-center items-center p-3 sticky">
+    <div className="bottom-0 w-full border-t-2 h-16 border-gray-400 bg-white z-10 flex flex-row gap-4 justify-center items-center p-3 sticky">
       <Link className="w-full" to='/home'>
         <button
           className={`w-full ${
@@ -25,14 +25,14 @@ const Navbar = () => {
         </button>
       </Link>
 
-      <button
+      <Link to="/search"
         className={`w-full ${
-          hoveredIcon === "profile" ? "text-red-primary" : ""
+          hoveredIcon === "search" ? "text-red-primary" : ""
         }`}
-        onMouseEnter={() => handleIconHover("profile")}
+        onMouseEnter={() => handleIconHover("search")}
       >
         <IoSearch className="w-full h-10" />
-      </button>
+      </Link>
       <Link  to='/notifications'
         className={`w-full ${
           hoveredIcon === "notifications" ? "text-red-primary" : ""
