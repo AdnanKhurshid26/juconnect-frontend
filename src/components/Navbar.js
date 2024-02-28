@@ -33,22 +33,22 @@ const Navbar = () => {
       >
         <IoSearch className="w-full h-10" />
       </button>
-      <button
+      <Link  to='/notifications'
+        className={`w-full ${
+          hoveredIcon === "notifications" ? "text-red-primary" : ""
+        }`}
+        onMouseEnter={() => handleIconHover("notifications")}
+      >
+        <IoMdNotificationsOutline className="w-full h-10" />
+      </Link>
+      <Link
         className={`w-full ${
           hoveredIcon === "message" ? "text-red-primary" : ""
         }`}
         onMouseEnter={() => handleIconHover("message")}
       >
         <RiMessage2Line className="w-full h-10" />
-      </button>
-      <button
-        className={`w-full ${
-          hoveredIcon === "settings" ? "text-red-primary" : ""
-        }`}
-        onMouseEnter={() => handleIconHover("settings")}
-      >
-        <IoMdNotificationsOutline className="w-full h-10" />
-      </button>
+      </Link>
     </div>
   );
 };
