@@ -18,7 +18,7 @@ const StudentProfile = () => {
     },
     {
       name: "CMATER Lab",
-      degree: "Heavy ML Researcher",
+      role: "Heavy ML Researcher",
       start: "April, 2021",
       end: "Present",
     },
