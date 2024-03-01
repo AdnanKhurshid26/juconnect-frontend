@@ -11,6 +11,8 @@ const Navbar = () => {
   const handleIconHover = (icon) => {
     setHoveredIcon(icon);
   };
+  
+  const pathName = window.location.pathname;
 
   return (
     <div className="bottom-0 w-full border-t-2 h-16 border-gray-400 bg-white z-10 flex flex-row gap-4 justify-center items-center p-3 sticky">
@@ -18,6 +20,8 @@ const Navbar = () => {
         <button
           className={`w-full ${
             hoveredIcon === "home" ? "text-red-primary" : ""
+          } ${
+            pathName === "/home" ? "text-orange-primary" : ""
           }`}
           onMouseEnter={() => handleIconHover("home")}
         >
@@ -28,6 +32,8 @@ const Navbar = () => {
       <Link to="/search"
         className={`w-full ${
           hoveredIcon === "search" ? "text-red-primary" : ""
+        }  ${
+          pathName === "/search" ? "text-orange-primary" : ""
         }`}
         onMouseEnter={() => handleIconHover("search")}
       >
@@ -36,6 +42,8 @@ const Navbar = () => {
       <Link  to='/notifications'
         className={`w-full ${
           hoveredIcon === "notifications" ? "text-red-primary" : ""
+        }  ${
+          pathName === "/notifications" ? "text-orange-primary" : ""
         }`}
         onMouseEnter={() => handleIconHover("notifications")}
       >
@@ -44,7 +52,7 @@ const Navbar = () => {
       <Link
         className={`w-full ${
           hoveredIcon === "message" ? "text-red-primary" : ""
-        }`}
+        } `}
         onMouseEnter={() => handleIconHover("message")}
       >
         <RiMessage2Line className="w-full h-10" />
