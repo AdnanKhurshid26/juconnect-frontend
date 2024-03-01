@@ -29,14 +29,14 @@ const Experience = (props) => {
             {addNew && (
               <div className="w-full flex flex-col gap-2">
                 <div className="flex flex-col gap-1">
-                  <label className="text-lg">School</label>
+                  <label className="text-lg">Company</label>
                   <input
                     type="text"
                     className="border border-orange-dark bg-backg-light rounded-sm p-1 px-2 text-base"
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="text-lg">Degree</label>
+                  <label className="text-lg">Role</label>
                   <input
                     type="text"
                     className="border border-orange-dark bg-backg-light rounded-sm p-1 px-2 text-base"
