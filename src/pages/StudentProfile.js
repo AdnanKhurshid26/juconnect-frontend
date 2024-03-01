@@ -1,18 +1,58 @@
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
 import React from "react";
-import { CgEditBlackPoint } from "react-icons/cg";
 import { FaLocationDot, FaPen } from "react-icons/fa6";
 import { IoMdSchool } from "react-icons/io";
+import Achievements from "../components/Achievements";
+import Education from "../components/Education";
+import Experience from "../components/Experience";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import ProjectCard from "../components/ProjectCard";
-import PublicationCard from "../components/PublicationCard";
+import Publications from "../components/Publications";
 const StudentProfile = () => {
+  const experience = [
+    {
+      name: "Amazon India",
+      role: "SDE Intern",
+      start: "May 2023",
+      end: "July 2023",
+    },
+    {
+      name: "CMATER Lab",
+      degree: "Heavy ML Researcher",
+      start: "April, 2021",
+      end: "Present",
+    },
+  ];
+  const education = [
+    {
+      name: "Jadavpur University",
+      degree: "B.E CSE",
+      start: "2020",
+      end: "2024",
+    },
+    {
+      name: "La Martinière Calcutta",
+      degree: "Higher Secondary",
+      start: "2018",
+      end: "2020",
+    },
+  ];
+
+  const achievements = [
+    "2 times HackOn with Amazon Winner","Redbus Hackathon Winner"
+  ];
+
+  const publications =  [
+    {
+      title:`Applications opened for "Generative AI and Web3" project`,
+      link:"abc.com/paper"
+    },
+    {
+      title:`Applications opened for "Generative AI and Web3" project`,
+      link:"abc.com/paper"
+    }
+  ]
+
   return (
     <div>
       <Header headertext="Student Profile" />
@@ -25,7 +65,7 @@ const StudentProfile = () => {
                 alt=""
                 className="h-20 w-auto rounded-full"
               />
-              <button className="px-2 py-1 border-white border flex flex-row items-center justify-center gap-2 font-semibold ">
+              <button className="px-2 py-1 border-white rounded-md bg-white text-orange-primary border flex flex-row items-center justify-center gap-2 font-semibold ">
                 {" "}
                 Edit <FaPen />
               </button>
@@ -62,95 +102,10 @@ const StudentProfile = () => {
             </div>
           </div>
           <div>
-            <Accordion>
-              <AccordionSummary
-                className="font-semibold text-xl"
-                expandIcon={<ArrowDropDownIcon />}
-                aria-controls="panel1-content"
-                id="panel1-header"
-              >
-                <div className="text-orange-primary flex flex-row gap-2 items-center h-1">
-                  <IoMdSchool />
-                  Education
-                </div>
-              </AccordionSummary>
-              <AccordionDetails>
-                <div className="flex flex-col gap-4">
-                  <div className="flex flex-row justify-between items-center gap-5">
-                    <CgEditBlackPoint className="text-orange-primary" />
-                    <div className="w-full flex flex-col gap-1">
-                      <div className="text-lg font-semibold">
-                        Jadavpur University
-                      </div>
-                      <div className="text-base">B.E CSE, 2020-2024</div>
-                    </div>
-                  </div>
-                  <div className="flex flex-row justify-between items-center gap-5">
-                    <CgEditBlackPoint className="text-orange-primary" />
-                    <div className="w-full flex flex-col">
-                      <div className="text-lg font-semibold">
-                        La Martinière Calcutta
-                      </div>
-                      <div className="text-base">
-                        Higher Secondary, 2018-2020
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </AccordionDetails>
-            </Accordion>
-            <Accordion>
-              <AccordionSummary
-                className="font-semibold text-xl"
-                expandIcon={<ArrowDropDownIcon />}
-                aria-controls="panel1-content"
-                id="panel1-header"
-              >
-                <div className="text-orange-primary flex flex-row gap-2 items-center h-1">
-                  <EmojiEventsIcon />
-                  Achievements
-                </div>
-              </AccordionSummary>
-              <AccordionDetails>
-                <div className="flex flex-col gap-4">
-                  <div className="flex flex-row justify-between items-center gap-5">
-                    <CgEditBlackPoint className="text-orange-primary" />
-                    <div className="w-full flex flex-col gap-1">
-                      <div className="text-base">
-                        2 times HackOn with Amazon Winner
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex flex-row justify-between items-center gap-5">
-                    <CgEditBlackPoint className="text-orange-primary" />
-                    <div className="w-full flex flex-col">
-                      <div className="text-base">Redbus Hackathon Winner</div>
-                    </div>
-                  </div>
-                </div>
-              </AccordionDetails>
-            </Accordion>
-            <Accordion>
-              <AccordionSummary
-                className="font-semibold text-xl"
-                expandIcon={<ArrowDropDownIcon />}
-                aria-controls="panel1-content"
-                id="panel1-header"
-              >
-                <div className="text-orange-primary flex flex-row gap-2 items-center h-1">
-                  <LibraryBooksIcon />
-                  Publications
-                </div>
-              </AccordionSummary>
-              <AccordionDetails>
-                <div className="flex flex-row overflow-scroll w-full gap-2">
-                  <PublicationCard />
-                  <PublicationCard />
-                  <PublicationCard />
-                  <PublicationCard />
-                </div>
-              </AccordionDetails>
-            </Accordion>
+            <Experience experience={experience}/>
+            <Education education={education} />
+            <Achievements achievements={achievements} />
+            <Publications publications={publications}/>
           </div>
         </div>
         <div className="flex flex-col gap-2 border w-full">
