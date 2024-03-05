@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { FaLocationDot, FaPen } from "react-icons/fa6";
 import { IoMdSchool } from "react-icons/io";
 import Achievements from "../components/Achievements";
@@ -8,37 +8,8 @@ import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import ProjectCard from "../components/ProjectCard";
 import Publications from "../components/Publications";
-import { useLocalStorage } from "../hooks/useLocalStorage";
-import { backendUrl, appendToUrl } from "../constants";
 
-const StudentProfile = () => {
-  const [getLocalStorage, setLocalStorage, removeLocalStorage] =
-    useLocalStorage("token");
-  const token = getLocalStorage();
-  const [studentProfile, setStudentProfile] = useState({});
-  console.log(token)
-
-  useEffect(() => {
-    async function getStudentProfile() {
-      const options = {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token}`,
-        },
-      };
-
-      const response = await fetch(appendToUrl(backendUrl, "profile"), options);
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data)
-        setStudentProfile(data);
-      }
-    }
-
-    getStudentProfile().then(() => console.log("Student Profile Fetched"));
-  }, []);
-
+const FacultyProfile = () => {
   const experience = [
     {
       name: "Amazon India",
@@ -68,24 +39,20 @@ const StudentProfile = () => {
     },
   ];
 
-  const achievements = [{
-    title: "2 times HackOn with Amazon Winner",
-    description: "Redbus Hackathon Winner",
-    link: "abc.com/paper",
-    date: "2023-05"
-  }
+  const achievements = [
+    "2 times HackOn with Amazon Winner","Redbus Hackathon Winner"
   ];
 
-  const publications = [
+  const publications =  [
     {
-      title: `Applications opened for "Generative AI and Web3" project`,
-      link: "abc.com/paper",
+      title:`Applications opened for "Generative AI and Web3" project`,
+      link:"abc.com/paper"
     },
     {
-      title: `Applications opened for "Generative AI and Web3" project`,
-      link: "abc.com/paper",
-    },
-  ];
+      title:`Applications opened for "Generative AI and Web3" project`,
+      link:"abc.com/paper"
+    }
+  ]
 
   return (
     <div>
@@ -94,6 +61,11 @@ const StudentProfile = () => {
         <div className="flex flex-col gap-2 border-2 border-slate-200 rounded-md">
           <div className="flex flex-row w-full p-4  gap-5 bg-orange-primary rounded-t-md text-white ">
             <div className="flex flex-col gap-3">
+              <img
+                src={require("../assets/james.jpg")}
+                alt=""
+                className="h-20 w-auto rounded-full"
+              />
               <button className="px-2 py-1 border-white rounded-md bg-white text-orange-primary border flex flex-row items-center justify-center gap-2 font-semibold ">
                 {" "}
                 Edit <FaPen />
@@ -101,12 +73,12 @@ const StudentProfile = () => {
             </div>
 
             <div className="flex flex-col gap-1">
-              <p className="text-2xl font-semibold ">{Object.keys(studentProfile).length>0 && studentProfile.name}</p>
+              <p className="text-2xl font-semibold ">Aditya Ganguly</p>
               <div className="flex flex-row gap-1 justify-start items-center">
-                <IoMdSchool /> {Object.keys(studentProfile).length>0 && studentProfile.student_profile.program}
+                <IoMdSchool /> Faculty at Jadavpur Univeristy
               </div>
               <div className="flex flex-row gap-1 justify-start items-center">
-                <FaLocationDot />{Object.keys(studentProfile).length>0 && studentProfile.student_profile.degree_name}
+                <FaLocationDot /> Kolkata, West Bengal
               </div>
             </div>
           </div>
@@ -131,8 +103,10 @@ const StudentProfile = () => {
             </div>
           </div>
           <div>
-            {Object.keys(studentProfile).length>0 && <Experience experience={studentProfile.student_profile.work_experiences} />}
-            {Object.keys(studentProfile).length>0 && <Achievements achievements={studentProfile.student_profile.achievements} />}
+            <Experience experience={experience}/>
+            <Education education={education} />
+            <Achievements achievements={achievements} />
+            <Publications publications={publications}/>
           </div>
         </div>
         <div className="flex flex-col gap-2 border w-full">
@@ -159,4 +133,4 @@ const StudentProfile = () => {
   );
 };
 
-export default StudentProfile;
+export default FacultyProfile;

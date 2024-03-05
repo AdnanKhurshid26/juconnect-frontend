@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Notifications from "./pages/Notifications";
 import Search from "./pages/Search";
 import StudentProfile from "./pages/StudentProfile";
+import CreateProject from "./pages/ProjectCreate";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/student-profile" element={<StudentProfile/>}></Route>
           <Route path="/notifications" element={<Notifications/>}></Route>
           <Route path="/search" element={<Search/>}></Route>
+          <Route path="/add-project" element={<CreateProject/>}></Route>
         </Routes>
       </BrowserRouter>
     </>

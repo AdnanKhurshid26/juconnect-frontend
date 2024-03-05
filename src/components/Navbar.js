@@ -4,6 +4,7 @@ import { IoSearch } from "react-icons/io5";
 import { MdOutlineHome } from "react-icons/md";
 import { RiMessage2Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import { IoIosAdd } from 'react-icons/io';
 
 const Navbar = () => {
   const [hoveredIcon, setHoveredIcon] = useState(null);
@@ -49,13 +50,13 @@ const Navbar = () => {
       >
         <IoMdNotificationsOutline className="w-full h-10" />
       </Link>
-      <Link
+      <Link to='/add-project'
         className={`w-full ${
           hoveredIcon === "message" ? "text-red-primary" : ""
         } `}
         onMouseEnter={() => handleIconHover("message")}
       >
-        <RiMessage2Line className="w-full h-10" />
+        <IoIosAdd className="w-full h-10" />
       </Link>
     </div>
   );
