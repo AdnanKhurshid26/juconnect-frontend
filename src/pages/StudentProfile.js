@@ -138,20 +138,19 @@ const StudentProfile = () => {
         <div className="flex flex-col gap-2 border w-full">
           <p className="text-2xl font-semibold">Projects created by you</p>
           <div className="flex flex-row overflow-scroll w-full gap-2">
-            <ProjectCard />
-            <ProjectCard />
-            <ProjectCard />
-            <ProjectCard />
+            {Object.keys(studentProfile).length>0 && studentProfile.projects.map((project) => (
+              <ProjectCard data={project} />
+            ))}
           </div>
         </div>
         <div className="flex flex-col gap-2 border w-full">
           <p className="text-2xl font-semibold">Projects joined</p>
-          <div className="flex flex-row overflow-scroll w-full gap-2">
+          {/* <div className="flex flex-row overflow-scroll w-full gap-2">
             <ProjectCard />
             <ProjectCard />
             <ProjectCard />
             <ProjectCard />
-          </div>
+          </div> */}
         </div>
       </div>
       <Navbar />

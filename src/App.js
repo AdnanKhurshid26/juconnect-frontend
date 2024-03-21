@@ -5,6 +5,9 @@ import Notifications from "./pages/Notifications";
 import Search from "./pages/Search";
 import StudentProfile from "./pages/StudentProfile";
 import CreateProject from "./pages/ProjectCreate";
+import SignUp from "./pages/SignUp";
+import OtpPage from "./pages/OtpPage";
+import DisplayProject from "./pages/DisplayProject";
 
 function App() {
   return (
@@ -17,6 +20,9 @@ function App() {
           <Route path="/notifications" element={<Notifications/>}></Route>
           <Route path="/search" element={<Search/>}></Route>
           <Route path="/add-project" element={<CreateProject/>}></Route>
+          <Route path="/signup" element={<SignUp/>}></Route>
+          <Route path="/otp" element={<OtpPage/>}></Route>
+          <Route path="/project" element={<DisplayProject/>}></Route>
         </Routes>
       </BrowserRouter>
     </>

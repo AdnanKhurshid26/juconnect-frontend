@@ -5,13 +5,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { backendUrl, appendToUrl } from "../constants";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
-const Login = () => {
+const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [roll, setRoll] = useState("");
   const navigate = useNavigate();
 
-  const [getLocalStorage, setLocalStorage, removeLocalStorage] = useLocalStorage("token");
 
   async function submitHandler() {
     console.log("Here")
@@ -20,10 +19,10 @@ const Login = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username: roll, password: password }),
+      body: JSON.stringify({ username: roll, password: password, email: email}),
     };
     const response = await fetch(
-      appendToUrl(backendUrl, "auth/login/jums"),
+      appendToUrl(backendUrl, "auth/signup/otp/jums"),
       options
     );
     
@@ -33,16 +32,7 @@ const Login = () => {
 
     if (response.ok) {
       const data = await response.json();
-      setLocalStorage(data.token);
-
-      if(data.role=="Student"){
-        navigate("/student-profile");
-      }
-
-      else{
-        navigate("/faculty-profile");
-      }
-      console.log(data);
+      navigate('/otp',{state: {email: email, roll: roll, password: password}})
     }
 
     else{
@@ -88,7 +78,7 @@ const Login = () => {
             />
           </div>
 
-          {/* <div className=" w-full flex flex-col gap-2 tracking-wider">
+          <div className=" w-full flex flex-col gap-2 tracking-wider">
             <label className="text-lg font-semibold text-neutral-600 ">
               Email
             </label>
@@ -96,24 +86,25 @@ const Login = () => {
               className="w-full bg-backg-light font-semibold border-2 border-neutral-500  h-12 rounded-md p-4  text-neutral-600 text-lg focus:outline-none"
               placeholder="Enter your email"
               type="email"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-          </div> */}
-          <Link className="text-neutral-600 text-md font-semibold" href={"#"}>
+          </div>
+          {/* <Link className="text-neutral-600 text-md font-semibold" href={"#"}>
             Forgot password ?
-          </Link>
+          </Link> */}
           <button
             className="h-12 rounded-md text-white text-xl font-lg font-bold text-center w-full bg-red-primary cursor-pointer"
             onClick={submitHandler}
           >
-            Login
+            Sign Up
           </button>
-          <div class="inline-flex items-center py-4  justify-center w-full">
+          {/* <div class="inline-flex items-center py-4  justify-center w-full">
             <hr class="w-full h-px bg-gray-200 border-0 dark:bg-gray-700" />
             <span class="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-backg-light left-1/2 ">
               or
             </span>
-          </div>
+          </div> */}
           {/* <div className="w-full flex flex-row gap-10 ">
             <button className="h-12 rounded-md  text-white text-xl font-lg font-bold text-center w-full bg-orange-primary cursor-pointer">
               JUMS
@@ -122,16 +113,10 @@ const Login = () => {
               Google
             </button>
           </div> */}
-          <div className="text-center w-full text-lg">
-            Don't have an account?{" "}
-            <button className="text-orange-primary font-bold text-xl" onClick={()=>{navigate("/signup")}}>
-              Signup
-            </button>{" "}
-          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default SignUp;
