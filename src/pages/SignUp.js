@@ -32,7 +32,7 @@ const SignUp = () => {
 
     if (response.ok) {
       const data = await response.json();
-      navigate('/otp',{state: {email: email, roll: roll, password: password}})
+      navigate('/otp',{state: {email: email, roll: roll, password: password,role:"Student"}})
     }
 
     else{

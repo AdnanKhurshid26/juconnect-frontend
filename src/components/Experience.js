@@ -11,7 +11,8 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const Experience = (props) => {
     const experience = props.experience;
-  
+
+    const nonEditable = props.nonEditable;
     const [addNew, setAddNew] = useState(false);
     const [getLocalStorage, setLocalStorage, removeLocalStorage] = useLocalStorage("token");
 
@@ -53,7 +54,7 @@ const Experience = (props) => {
         </AccordionSummary>
         <AccordionDetails>
           <div className="flex flex-col gap-4">
-            {addNew && (
+            {addNew && !nonEditable && (
               <div className="w-full flex flex-col gap-2">
                 <div className="flex flex-col gap-1">
                   <label className="text-lg">Company</label>
@@ -108,7 +109,7 @@ const Experience = (props) => {
                 </button>
               </div>
             )}
-            {!addNew && (
+            {!addNew && !nonEditable && (
               <button
                 onClick={() => {
                   setAddNew(true);

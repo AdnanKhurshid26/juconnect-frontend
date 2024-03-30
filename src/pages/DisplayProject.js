@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaPen } from "react-icons/fa6";
 import { MdDescription } from "react-icons/md";
 import { IoMdAddCircleOutline } from "react-icons/io";
@@ -10,85 +10,104 @@ import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import ProjectCard from "../components/ProjectCard";
 import Links from "../components/Links";
+import { useParams,useLocation } from "react-router-dom";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { backendUrl, appendToUrl } from "../constants";
+import { insertData } from "../utils/insertUtils";
+import LoadingScreen from "../components/LoadingScreen";
+
 const DisplayProject = () => {
-  const participant = [
-    {
-      name: "Aditya Ganguly",
-      role: "Backend",
-      start: "May 2023",
-      end: "Present",
-    },
-    {
-      name: "Souptik",
-      role: "Search Algorithm",
-      start: "April, 2021",
-      end: "Present",
-    },
-    {
-      name: "Ritodeep Sikdar",
-      role: "Frontend",
-      start: "April, 2021",
-      end: "Present",
-    },
-    {
-      name: "Prof. Sanjoy Kumar Saha",
-      role: "Mentor",
-      start: "April, 2021",
-      end: "Present",
-    },
-  ];
-  const progress = [
-    {
-      stage: "Ideation and HLD",
-      describe: [
-        {
-          actionitem: "Design the HLD and DB schema",
-          status: 1
-        },
-        {
-          actionitem: "Fix the tech stack",
-          status: 1
-        },
-        {
-          actionitem: "Front end mocks",
-          status: 1
-      }],
-      start: "Jan, 2024",
-      end: "Feb, 2024",
-    },
-    {
-      stage: "Prototype Phase I",
-      describe: [
-        {
-          actionitem: "Developed a working prototype with frontend in react and tailwind and backend and schema with Jums and OTP based auth",
-          status: 0
-        },
-        {
-          actionitem: "Integrate all systems",
-          status: -1
-        },
-      ],
-      start: "Feb, 2024",
-      end: "March, 2024",
-    },
-  ];
+  const { id } = useParams();
+  const {state} = useLocation();
+  // console.log(id)
+  const getDateStringFromISO = (date) => {
+    const d = new Date(date);
+    return `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}`;
+  };
 
-  const links =  [
-    {
-      title:"Github Link",
-      link:"github.com"
-    },
-    {
-      title:"Project Demo",
-      link:"abc.com/project/demo"
-    },
-    {
-      title:"Project Docs",
-      link:"abc.com/project/docs"
-    },
+  const [getLocalStorage, setLocalStorage, removeLocalStorage] =
+    useLocalStorage("token");
 
-  ]
+  const token = getLocalStorage();
 
+  const [project, setProject] = useState({});
+  const [toggleAdd, setToggleAdd] = useState(false);
+  const [tags, setTags] = useState([]);
+  const [inputTag, setInputTag] = useState("");
+  const [editable, setEditable] = useState(false);
+
+  useEffect(() => {
+    async function getProject() {
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+      };
+
+      const response = await fetch(
+        appendToUrl(backendUrl, `project/${id}`),
+        options
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setProject(data);
+        console.log(data);
+        setTags(data.tags);
+      }
+    }
+
+    getProject().then(() => {});
+  }, []);
+
+  async function addTag() {
+    const data = {
+      tag_name: inputTag,
+      project_id: Number.parseInt(id),
+    };
+
+    try {
+      const responseData = await insertData(
+        data,
+        appendToUrl(backendUrl, "project/add_tag_name"),
+        token
+      );
+      window.alert(responseData.message);
+
+      setTags([...tags, { name: inputTag }]);
+    } catch (e) {
+      window.alert(e.message);
+    }
+  }
+
+  async function updateProject(){
+    const options = {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+      body: JSON.stringify(project),
+    };
+    const response = await fetch(
+      appendToUrl(backendUrl, `project`),
+      options
+    );
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      window.alert(data.message);
+    }
+    else{
+      const data = await response.json();
+      console.log(data);
+      window.alert(data.message);
+    }
+  }
+  if (Object.keys(project).length === 0) {
+    return <LoadingScreen />;
+  }
   return (
     <div>
       <Header headertext="Project" />
@@ -101,20 +120,57 @@ const DisplayProject = () => {
                 alt=""
                 className="h-20 w-auto rounded-full"
               />
-              <button className="px-2 py-1 border-white rounded-md bg-white text-orange-primary border flex flex-row items-center justify-center gap-2 font-semibold">
+              {/* <button className="px-2 py-1 border-white rounded-md bg-white text-orange-primary border flex flex-row items-center justify-center gap-2 font-semibold">
                 {" "}
                 Edit <FaPen />
               </button>
               <button className="px-2 py-1 border-white rounded-md bg-white text-orange-primary border flex flex-row items-center justify-center gap-2 font-semibold">
 
                 Join <IoMdAddCircleOutline />
-              </button>
+              </button> */}
+              {project.editable && (
+                <div className="flex flex-row gap-5 items-center justify-center">
+                  <button
+                    className="text-white mt-2 bg-red-primary py-1  text-base font-semibold rounded-md w-1/2"
+                    onClick={() => {
+                      if(editable){
+                        updateProject();
+                      }
+                      let edit = editable;
+                      setEditable(!edit);
+                    }}
+                  >
+                    {editable ? "Save" : "Edit"}
+                  </button>
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col gap-1">
-              <p className="text-2xl font-semibold ">JU Campus Connect</p>
+              <p className="text-2xl font-semibold ">
+              <input
+                  value={project.title}
+                  className={
+                    "bg-transparent " + (editable ? "" : "focus:outline-none")
+                  }
+                  readOnly={!editable}
+                  onChange={(event) => {
+                    setProject({ ...project, title: event.target.value });
+                  }}
+                ></input>
+              </p>
               <div className="flex flex-row gap-1 justify-start items-center">
-                <MdDescription /> This project aims to increase project collaboration and matching between JU students, faculty and alumni
+                <MdDescription />{" "}
+                <input
+                  value={project.description}
+                  className={
+                    "bg-transparent " + (editable ? "" : "focus:outline-none")
+                  }
+                  readOnly={!editable}
+                  onChange={(event) => {
+                    setProject({ ...project, description: event.target.value });
+                  }}
+                ></input>
               </div>
               <div className="flex flex-row gap-1 justify-start items-center">
                 <CgEditBlackPoint />
@@ -122,41 +178,86 @@ const DisplayProject = () => {
               </div>
               <div className="flex flex-row gap-1 justify-start items-center">
                 <CgEditBlackPoint />
-                Maximum Participants: 6
+                Maximum Participants: <input
+                  type="number"
+                  value={project.max_members}
+                  className={
+                    "bg-transparent " + (editable ? "" : "focus:outline-none")
+                  }
+                  readOnly={!editable}
+                  onChange={(event) => {
+                    setProject({ ...project, max_members: Number.parseInt(event.target.value) });
+                  }}>
+                  
+                </input>
               </div>
               <div className="flex flex-row gap-1 justify-start items-center">
                 <CgEditBlackPoint />
-                Timeline: January, 2024 - May, 2024</div>
+                Start Date: {getDateStringFromISO(project.start_date)}
               </div>
+            </div>
           </div>
           <div className="flex flex-wrap gap-1 p-2 text-sm">
-            <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
-              App Dev
-            </div>
-            <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
-              Project Search
-            </div>
-            <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
-              React
-            </div>
-            <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
-              MongoDB
-            </div>
-            <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
-              Hackathon
-            </div>
-            <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
-              Software Development
-            </div>
+            {tags.map((tag, index) => {
+              return (
+                <div
+                  key={index}
+                  className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center"
+                >
+                  {tag.name}
+                </div>
+              );
+            })}
+            {toggleAdd && (
+              <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
+                <input
+                  type="text"
+                  value={inputTag}
+                  onChange={(e) => setInputTag(e.target.value)}
+                ></input>
+              </div>
+            )}
+            {project.editable && (
+              <div
+                className="bg-orange-500 text-white-500 font-medium px-1 rounded flex items-center justify-center"
+                onClick={() => {
+                  let add = toggleAdd;
+
+                  if (add && inputTag.length > 0) {
+                    addTag();
+                    setTags([...tags, inputTag]);
+                    setInputTag("");
+                  }
+                  setToggleAdd(!add);
+                }}
+              >
+                {toggleAdd ? (inputTag.length > 0 ? "Save" : "Close") : "Add"}
+              </div>
+            )}
           </div>
+          {state && state.notMember && (
+            <div className="flex flex-row gap-5 items-center justify-center">
+              You are not a member of this project. Consider contacting the
+              creator to join.
+            </div>
+          )}
           <div>
-            <Participant participant={participant}/>
-            <Progress progress={progress} />
-            <Links links={links}/>
+            <Participant
+              participant={project.users}
+              id={id}
+              editable={project.editable}
+              creator_id={project.creator_id}
+            />
+            <Progress
+              progress={project.timeline_events}
+              id={id}
+              editable={project.editable}
+            />
+            {/* <Links links={links}/> */}
             {/* <Gallery/> */}
           </div>
         </div>
-        <div className="flex flex-col gap-2 border w-full">
+        {/* <div className="flex flex-col gap-2 border w-full">
           <p className="text-2xl font-semibold">Projects created by you</p>
           <div className="flex flex-row overflow-scroll w-full gap-2">
             <ProjectCard />
@@ -164,8 +265,8 @@ const DisplayProject = () => {
             <ProjectCard />
             <ProjectCard />
           </div>
-        </div>
-        <div className="flex flex-col gap-2 border w-full">
+        </div> */}
+        {/* <div className="flex flex-col gap-2 border w-full">
           <p className="text-2xl font-semibold">Projects joined</p>
           <div className="flex flex-row overflow-scroll w-full gap-2">
             <ProjectCard />
@@ -173,7 +274,7 @@ const DisplayProject = () => {
             <ProjectCard />
             <ProjectCard />
           </div>
-        </div>
+        </div> */}
       </div>
       <Navbar />
     </div>

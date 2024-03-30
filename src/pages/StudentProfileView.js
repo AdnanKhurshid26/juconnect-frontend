@@ -12,29 +12,31 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 import { backendUrl, appendToUrl } from "../constants";
 import { insertData } from "../utils/insertUtils";
 import LoadingScreen from "../components/LoadingScreen";
+import { useParams } from "react-router-dom";
 
-const StudentProfile = () => {
+const StudentProfileView = () => {
+  const {email} = useParams();
   const [getLocalStorage, setLocalStorage, removeLocalStorage] =
     useLocalStorage("token");
   const token = getLocalStorage();
   const [studentProfile, setStudentProfile] = useState({});
   console.log(token);
-  const [toggleAdd, setToggleAdd] = useState(false);
   const [professionalInterests, setProfessionalInterests] = useState([]);
-  const [inputProfessionalInterest, setInputProfessionalInterest] =
-    useState("");
 
   useEffect(() => {
     async function getStudentProfile() {
       const options = {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `${token}`,
         },
+        body: JSON.stringify({email}),
       };
 
-      const response = await fetch(appendToUrl(backendUrl, "profile"), options);
+      console.log(options)
+
+      const response = await fetch(appendToUrl(backendUrl, "profile/email"), options);
       if (response.ok) {
         const data = await response.json();
         console.log(data);
@@ -46,30 +48,6 @@ const StudentProfile = () => {
     getStudentProfile().then(() => console.log("Student Profile Fetched"));
   }, []);
 
-  async function addProfessionalInterest() {
-    const data = {
-      professional_interest_name: inputProfessionalInterest,
-    };
-
-    try {
-      const responseData = await insertData(
-        data,
-        appendToUrl(
-          backendUrl,
-          "user/professional_interests/add_professional_interest_name"
-        ),
-        token
-      );
-      window.alert(responseData.message);
-
-      setProfessionalInterests([
-        ...professionalInterests,
-        { name: inputProfessionalInterest },
-      ]);
-    } catch (e) {
-      window.alert(e.message);
-    }
-  }
   if (Object.keys(studentProfile).length == 0) {
     return <LoadingScreen />;
   }
@@ -113,49 +91,24 @@ const StudentProfile = () => {
                 {interest.name}
               </div>
             ))}
-            {toggleAdd && (
-              <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
-                <input
-                  type="text"
-                  value={inputProfessionalInterest}
-                  onChange={(e) => setInputProfessionalInterest(e.target.value)}
-                ></input>
-              </div>
-            )}
-            <div
-              className="bg-orange-500 text-white-500 font-medium px-1 rounded flex items-center justify-center"
-              onClick={() => {
-                let add = toggleAdd;
-
-                if (add && inputProfessionalInterest.length > 0) {
-                  addProfessionalInterest();
-                  setInputProfessionalInterest("");
-                }
-                setToggleAdd(!add);
-              }}
-            >
-              {toggleAdd
-                ? inputProfessionalInterest.length > 0
-                  ? "Save"
-                  : "Close"
-                : "Add"}
-            </div>
           </div>
           <div>
             {Object.keys(studentProfile).length > 0 && (
               <Experience
                 experience={studentProfile.student_profile.work_experiences}
+                nonEditable={true}
               />
             )}
             {Object.keys(studentProfile).length > 0 && (
               <Achievements
                 achievements={studentProfile.student_profile.achievements}
+                nonEditable={true}
               />
             )}
           </div>
         </div>
         <div className="flex flex-col gap-2 border w-full">
-          <p className="text-2xl font-semibold">Projects created by you</p>
+          <p className="text-2xl font-semibold">Projects created</p>
           <div className="flex flex-row overflow-scroll w-full gap-2">
             {Object.keys(studentProfile).length > 0 &&
               studentProfile.created_projects.map((project) => (
@@ -178,4 +131,4 @@ const StudentProfile = () => {
   );
 };
 
-export default StudentProfile;
+export default StudentProfileView;

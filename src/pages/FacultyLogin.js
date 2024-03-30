@@ -5,10 +5,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { backendUrl, appendToUrl } from "../constants";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
-const Login = () => {
+const FacultyLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [roll, setRoll] = useState("");
   const navigate = useNavigate();
 
   const [getLocalStorage, setLocalStorage, removeLocalStorage] = useLocalStorage("token");
@@ -21,23 +20,20 @@ const Login = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username: roll, password: password }),
+      body: JSON.stringify({ email: email, password: password }),
     };
     const response = await fetch(
-      appendToUrl(backendUrl, "auth/login/jums"),
+      appendToUrl(backendUrl, "auth/login/faculty"),
       options
     );
     
     setEmail("");
     setPassword("");
-    setRoll("");
 
     if (response.ok) {
       const data = await response.json();
       setLocalStorage(data.token);
       setRole(data.role)
-      
-
       if(data.role=="Student"){
         navigate("/student-profile");
       }
@@ -61,21 +57,23 @@ const Login = () => {
           alt=""
           className="h-40 w-auto"
         />
-
+        <div className="p-2 w-full text-center bg-[#a18d8d] font-normal text-white text-xl px-2">
+          Faculty Login
+        </div>
         <div className="p-2 w-full text-center bg-[#a18d8d] font-normal text-white text-xl px-2">
           Connect and Collaborate with ease
         </div>
         <div className="px-8 flex flex-col gap-4 w-full">
           <div className=" w-full flex flex-col gap-2 tracking-wider">
             <label className="text-lg font-semibold text-neutral-600 ">
-              Roll
+              Email
             </label>
             <input
               className="w-full bg-backg-light font-semibold border-2 border-neutral-500  h-12 rounded-md p-4  text-neutral-600 text-lg focus:outline-none"
-              placeholder="Enter your Roll"
+              placeholder="Enter your Email"
               type="text"
-              value={roll}
-              onChange={(e) => setRoll(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className=" w-full flex flex-col gap-2 tracking-wider">
@@ -90,6 +88,20 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+
+
+          {/* <div className=" w-full flex flex-col gap-2 tracking-wider">
+            <label className="text-lg font-semibold text-neutral-600 ">
+              Confirm Password
+            </label>
+            <input
+              className="w-full bg-backg-light font-semibold border-2 border-neutral-500  h-12 rounded-md p-4  text-neutral-600 text-lg focus:outline-none"
+              placeholder="Enter your Password"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </div> */}
 
           {/* <div className=" w-full flex flex-col gap-2 tracking-wider">
             <label className="text-lg font-semibold text-neutral-600 ">
@@ -124,15 +136,8 @@ const Login = () => {
           </div> */}
           <div className="text-center w-full text-lg">
             Don't have an account?{" "}
-            <button className="text-orange-primary font-bold text-xl" onClick={()=>{navigate("/signup")}}>
+            <button className="text-orange-primary font-bold text-xl" onClick={()=>{navigate("/faculty-signup")}}>
               Signup
-            </button>{" "}
-          </div>
-
-          <div className="text-center w-full text-lg">
-            Are a Faculty?{" "}
-            <button className="text-orange-primary font-bold text-xl" onClick={()=>{navigate("/faculty-login")}}>
-              Faculty Login
             </button>{" "}
           </div>
         </div>
@@ -141,4 +146,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default FacultyLogin;

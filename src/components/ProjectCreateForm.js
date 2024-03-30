@@ -22,12 +22,22 @@ const AddProjectForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(formData.title===""||formData.max_members===""||formData.start_date===""||formData.description===""){
+      window.alert("Please fill all the fields");
+      return;
+    }
     // Add your code here to submit the form data
     const token = getLocalStorage();
     const url = appendToUrl(backendUrl, "project");
 
     formData.start_date = new Date(formData.start_date).toISOString();
-    formData.end_date = new Date(formData.end_date).toISOString();
+
+    if(formData.end_date===""){
+      formData.end_date=null;
+    }
+    else{
+      formData.end_date = new Date(formData.end_date).toISOString();
+    }
     formData.max_members = parseInt(formData.max_members);
 
     const response = await insertData(formData, url, token);

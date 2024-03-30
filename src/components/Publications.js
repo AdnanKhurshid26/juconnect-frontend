@@ -10,6 +10,9 @@ import PublicationCard from "../components/PublicationCard";
 const Publications = (props) => {
   const publications = props.publications;
   const [addNew, setAddNew] = useState(false);
+
+  const notEditable = props.notEditable;
+
   return (
     <Accordion>
       <AccordionSummary
@@ -24,7 +27,7 @@ const Publications = (props) => {
         </div>
       </AccordionSummary>
       <AccordionDetails className="flex flex-col gap-2">
-      {addNew && (
+      {addNew && !notEditable && (
             <div className="w-full flex flex-col gap-2">
               <div className="flex flex-col gap-1">
                 <label className="text-lg">Title</label>
@@ -50,7 +53,7 @@ const Publications = (props) => {
               </button>
             </div>
           )}
-          {!addNew && (
+          {!addNew && !notEditable &&(
             <button
               onClick={() => {
                 setAddNew(true);

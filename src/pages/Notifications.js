@@ -1,80 +1,154 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
-import NotificationCard from '../components/NotificationCard';
-
+import NotificationCard from "../components/NotificationCard";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { backendUrl, appendToUrl } from "../constants";
 const Notifications = () => {
+  const [getLocalStorage, setLocalStorage, removeLocalStorage] =
+    useLocalStorage("token");
 
-    const notifs = [
-        {
-            name:'Aditya Ganguly',
-            project:'Generative AI and Web3',
-            requestNotif:true,
-            seen:false,
+  const token = getLocalStorage();
+  const [receivedNotifs, setReceivedNotifs] = useState([]);
+  const [sentNotifs, setSentNotifs] = useState([]);
 
+  useEffect(() => {
+    async function getSentNotifs() {
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
         },
-        {
-            name:'Adnan Khurshid',
-            project:'Nalla NLP Task',
-            requestNotif:false,
-            seen:true,
-        },
-        {
-            name:'Aditya Ganguly',
-            project:'Generative AI and Web3',
-            requestNotif:true,
-            seen:false,
+      };
 
-        },
-        {
-            name:'Adnan Khurshid',
-            project:'Nalla NLP Task',
-            requestNotif:false,
-            seen:true,
-        },
-        {
-            name:'Aditya Ganguly',
-            project:'Generative AI and Web3',
-            requestNotif:true,
-            seen:false,
+      const response = await fetch(
+        appendToUrl(backendUrl, "notification/get_notifs/from_id"),
+        options
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
 
-        },
-        {
-            name:'Adnan Khurshid',
-            project:'Nalla NLP Task',
-            requestNotif:false,
-            seen:true,
-        },
-        {
-            name:'Aditya Ganguly',
-            project:'Generative AI and Web3',
-            requestNotif:true,
-            seen:false,
+        data.map((notif) => {
+          notif.requestNotif = false;
+        })
+        setSentNotifs(data);
+      }
+    }
 
+    async function getReceivedNotifs() {
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
         },
-        {
-            name:'Adnan Khurshid',
-            project:'Nalla NLP Task',
-            requestNotif:false,
-            seen:true,
-        },
-    ]
+      };
+
+      const response = await fetch(
+        appendToUrl(backendUrl, "notification/get_notifs/to_id"),
+        options
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+
+        data.map((notif) => {
+          notif.requestNotif = true;
+        })
+        setReceivedNotifs(data);
+      }
+    }
+
+    let promiseList = [];
+    //use promise.all
+    promiseList.push(getReceivedNotifs());
+    promiseList.push(getSentNotifs());
+
+    Promise.all(promiseList).then(() =>
+      console.log("All Notifications Fetched")
+    );
+  }, []);
+
+  function removeReceiveNotifFromList(id){
+    setReceivedNotifs(receivedNotifs.filter((notif) => notif.id !== id));
+  }
+
+  function removeSentNotifFromList(id){
+    setSentNotifs(sentNotifs.filter((notif) => notif.id !== id));
+  }
+
+  if (receivedNotifs.length === 0 && sentNotifs.length === 0) {
+    return (
+      <div>
+        <Header headertext="Notifications" />
+        <div className="flex flex-row justify-between items-center w-full border-b border-neutral-300 px-4 py-2 bg-white">
+          <div></div>
+          <div className="text-lg font-semibold">Received Notifications</div>
+          <div></div>
+        </div>
+        <div className="min-h-screen flex flex-col w-full">
+          <div className="flex justify-center items-center h-20">
+            <div className="text-lg font-semibold">No Notifications</div>
+          </div>
+        </div>
+
+        <div className="flex flex-row justify-between items-center w-full border-b border-neutral-300 px-4 py-2 sticky bg-white">
+          <div></div>
+          <div className="text-lg font-semibold">Sent Notifications</div>
+          <div></div>
+        </div>
+
+        <div className="min-h-screen flex flex-col w-full">
+          <div className="flex justify-center items-center h-20">
+            <div className="text-lg font-semibold">No Notifications</div>
+          </div>
+        </div>
+
+        <Navbar />
+      </div>
+    );
+  }
 
   return (
     <div>
       <Header headertext="Notifications" />
-      <div className="min-h-screen flex flex-col w-full">
-        {notifs.map((notif, index) => (
-          <NotificationCard
-            key={index}
-            data={notif}
-          />
-        ))}
-      </div>
+      {receivedNotifs.length > 0 && (
+        <div className="flex flex-row justify-between items-center w-full border-b border-neutral-300 px-4 py-2 bg-white">
+          <div></div>
+          <div className="text-lg font-semibold">Received Notifications</div>
+          <div></div>
+        </div>
+      )}
+
+      {receivedNotifs.length > 0 && (
+        <div className="min-h-screen flex flex-col w-full">
+          {receivedNotifs.map((notif, index) => (
+            <NotificationCard key={index} data={notif} removeReceiveNotifFromList={removeReceiveNotifFromList}/>
+          ))}
+        </div>
+      )}
+
+      {sentNotifs.length > 0 && (
+        <div className="flex flex-row justify-between items-center w-full border-b border-neutral-300 px-4 py-2 sticky bg-white">
+          <div></div>
+          <div className="text-lg font-semibold">Sent Notifications</div>
+          <div></div>
+        </div>
+      )}
+
+      {sentNotifs.length > 0 && (
+        <div className="min-h-screen flex flex-col w-full">
+          {sentNotifs.map((notif, index) => (
+            <NotificationCard key={index} data={notif} />
+          ))}
+        </div>
+      )}
 
       <Navbar />
     </div>
-  )
-}
+  );
+};
 
-export default Notifications
+export default Notifications;

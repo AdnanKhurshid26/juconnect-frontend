@@ -1,12 +1,51 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+const {backendUrl, appendToUrl} = require("../constants");
 
 const NotificationCard = (props) => {
     const data = props.data
+    const [getLocalStorage, setLocalStorage, removeLocalStorage] = useLocalStorage("token");
+    const token = getLocalStorage();
+
+    const navigate = useNavigate();
+    const formatDate = (date) => {
+        const d = new Date(date);
+        return `${d.getDate()}/${d.getMonth()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
+    }
+
+
+    async function acceptNotification(event) {
+      event.stopPropagation();
+        const options = {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `${token}`,
+            },
+            body: JSON.stringify(data),
+        };
+        const response = await fetch(appendToUrl(backendUrl, `notification/accept_notif`), options);
+        if (response.ok) {
+            const data = await response.json();
+            window.alert(data.message);
+            props.removeReceiveNotifFromList(data.id)
+            console.log(data);
+        }
+        else{
+            const data = await response.json();
+            window.alert(data.message);
+            console.log(data);
+        }
+    }
+
+
   return (
     <div
       className={`border-b-2 border-neutral-300 p-2 flex flex-row gap-2 justify-between items-center ${
         !data.seen && "bg-backg-light"
       }`}
+      onClick = {() => navigate(`/project/${data.project_id}`)}
     >
       <img
         src={require("../assets/james.jpg")}
@@ -15,14 +54,18 @@ const NotificationCard = (props) => {
       />
       <div className="w-10/12 text-orange-dark flex flex-col">
         <div className="w-full">
-          <span className="text-lg font-semibold">{data.name}</span>{" "}
+          <span className="text-lg font-semibold">{data.requestNotif ? data.from_name:data.to_name}</span>{" "}
           {data.requestNotif
-            ? "has requested to join your project."
-            : "has accepted your request to join."}
+            ? "Has invited you to join their project"
+            : "Has been invited to join your project"}
+          {data.requestNotif &&(
+            <button className="text-white mt-2 bg-orange-primary  py-1 flex flex-row gap-1 items-center justify-center text-base font-semibold rounded-md"
+            onClick={acceptNotification}>Accept</button>
+          )}
         </div>
         <div className="w-full justify-between flex flex-row">
-          <div className="text-lg font-semibold ">{data.project}</div>
-          <div className="text-sm italic">1h</div>
+          <div className="text-lg font-semibold ">{data.project_name}</div>
+          <div className="text-sm italic">{formatDate(data.date)}</div>
         </div>
       </div>
     </div>
