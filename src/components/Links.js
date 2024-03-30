@@ -6,10 +6,57 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import React, { useState } from "react";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { FaLink } from "react-icons/fa";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { backendUrl, appendToUrl } from "../constants";
 
 const Links = (props) => {
   const links = props.links;
+  const id = Number.parseInt(props.id);
   const [addNew, setAddNew] = useState(false);
+  const [name, setName] = useState("");
+  const [link, setLink] = useState("");
+  const [stateLink, setStateLink] = useState(links);
+
+  const [getLocalStorage, setLocalStorage, removeLocalStorage] =
+    useLocalStorage("token");
+  const token = getLocalStorage();
+
+  async function addLink() {
+    const linkData = {
+      name: name,
+      link: link,
+      project_id: id,
+    };
+
+    try {
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+        body: JSON.stringify(linkData),
+      };
+
+      const response = await fetch(
+        appendToUrl(backendUrl, "project/add_link"),
+        options
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        window.alert(data.message);
+        setStateLink([...stateLink, linkData]);
+      } else {
+        window.alert("Error adding link");
+      }
+
+      setLink("");
+      setName("");
+    } catch (e) {
+      window.alert(e.message);
+    }
+  }
   return (
     <Accordion>
       <AccordionSummary
@@ -24,58 +71,64 @@ const Links = (props) => {
         </div>
       </AccordionSummary>
       <AccordionDetails className="flex flex-col gap-2">
-      {addNew && (
-            <div className="w-full flex flex-col gap-2">
-              <div className="flex flex-col gap-1">
-                <label className="text-lg">Title</label>
-                <input
-                  type="text"
-                  className="border border-orange-dark bg-backg-light rounded-sm p-1 px-2 text-base"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-lg">Link</label>
-                <input
-                  type="text"
-                  className="border border-orange-dark bg-backg-light rounded-sm p-1 px-2 text-base"
-                />
-              </div>
-              <button
-                onClick={() => {
-                  setAddNew(false);
-                }}
-                className="text-white mt-2 bg-orange-primary  py-1 flex flex-row gap-1 items-center justify-center text-base font-semibold rounded-md"
-              >
-                Save
-              </button>
+        {addNew && props.editable && (
+          <div className="w-full flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
+              <label className="text-lg">Name</label>
+              <input
+                type="text"
+                className="border border-orange-dark bg-backg-light rounded-sm p-1 px-2 text-base"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
             </div>
-          )}
-          {!addNew && (
+            <div className="flex flex-col gap-1">
+              <label className="text-lg">Link</label>
+              <input
+                type="text"
+                className="border border-orange-dark bg-backg-light rounded-sm p-1 px-2 text-base"
+                value={link}
+                onChange={(e) => setLink(e.target.value)}
+              />
+            </div>
             <button
-              onClick={() => {
-                setAddNew(true);
+              onClick={async () => {
+                await addLink();
+                setAddNew(false);
               }}
-              className="text-white bg-orange-primary  py-1 flex flex-row gap-1 items-center justify-center text-base font-semibold rounded-md w-full"
+              className="text-white mt-2 bg-orange-primary  py-1 flex flex-row gap-1 items-center justify-center text-base font-semibold rounded-md"
             >
-              <IoMdAddCircleOutline className="font-bold" />
-              Add
+              Save
             </button>
-          )}
+          </div>
+        )}
+        {!addNew && props.editable && (
+          <button
+            onClick={() => {
+              setAddNew(true);
+            }}
+            className="text-white bg-orange-primary  py-1 flex flex-row gap-1 items-center justify-center text-base font-semibold rounded-md w-full"
+          >
+            <IoMdAddCircleOutline className="font-bold" />
+            Add
+          </button>
+        )}
         <div className="flex flex-row w-full gap-10">
-            {links.map((item,index)=>(
-                <div
-                  key={index}
-                  className="flex flex-row justify-between items-center gap-5"
-                >
-
-                  <div className="flex flex-row gap-1">
-                    <FaLink className="text-orange-primary" />
-                    <div className="text-lg font-semibold"> 
-                      <a target="_blank" href={item.link}>{item.title}</a>
-                    </div>
-                  </div>
+          {stateLink.map((item, index) => (
+            <div
+              key={index}
+              className="flex flex-row justify-between items-center gap-5"
+            >
+              <div className="flex flex-row gap-1">
+                <FaLink className="text-orange-primary" />
+                <div className="text-lg font-semibold">
+                  <a target="_blank" href={item.link}>
+                    {item.name}
+                  </a>
                 </div>
-            ))}
+              </div>
+            </div>
+          ))}
         </div>
       </AccordionDetails>
     </Accordion>

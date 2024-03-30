@@ -253,6 +253,8 @@ const DisplayProject = () => {
               id={id}
               editable={project.editable}
             />
+            
+            <Links links={project.project_links} editable={project.editable} id={id} />
             {/* <Links links={links}/> */}
             {/* <Gallery/> */}
           </div>
