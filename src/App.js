@@ -13,26 +13,33 @@ import FacultySignup from "./pages/FacultySignup";
 import FacultyProfile from "./pages/FacultyProfile";
 import StudentProfileView from "./pages/StudentProfileView";
 import FacultyProfileView from "./pages/FacultyProfileView";
-
+import UnauthorizedPage from "./pages/Unauthorized";
+import { verifyToken } from "./utils/verify";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 function App() {
+
+  function ProtectedRoute(element){
+    return verifyToken() ? element : <UnauthorizedPage/>
+  }
+
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login/>}></Route>
-          <Route path="/home" element={<Home/>}></Route>
-          <Route path="/student-profile" element={<StudentProfile/>}></Route>
-          <Route path="/notifications" element={<Notifications/>}></Route>
-          <Route path="/search" element={<Search/>}></Route>
-          <Route path="/add-project" element={<CreateProject/>}></Route>
+          <Route path="/home" element={ProtectedRoute(<Home/>)}></Route>
+          <Route path="/student-profile" element={ProtectedRoute(<StudentProfile/>)}></Route>
+          <Route path="/notifications" element={ProtectedRoute(<Notifications/>)}></Route>
+          <Route path="/search" element={ProtectedRoute(<Search/>)}></Route>
+          <Route path="/create-project" element={ProtectedRoute(<CreateProject/>)}></Route>
           <Route path="/signup" element={<SignUp/>}></Route>
           <Route path="/otp" element={<OtpPage/>}></Route>
-          <Route path="/project/:id" element={<DisplayProject/>}></Route>
+          <Route path="/project/:id" element={ProtectedRoute(<DisplayProject/>)}></Route>
           <Route path="/faculty-login" element={<FacultyLogin/>}></Route>
           <Route path="/faculty-signup" element={<FacultySignup/>}></Route>
-          <Route path="/faculty-profile" element={<FacultyProfile/>}></Route>
-          <Route path="/student-profile-view/:email" element={<StudentProfileView/>}></Route>
-          <Route path="/faculty-profile-view/:email" element={<FacultyProfileView/>}></Route>
+          <Route path="/faculty-profile" element={ProtectedRoute(<FacultyProfile/>)}></Route>
+          <Route path="/student-profile-view/:email" element={ProtectedRoute(<StudentProfileView/>)}></Route>
+          <Route path="/faculty-profile-view/:email" element={ProtectedRoute(<FacultyProfileView/>)}></Route>
         </Routes>
       </BrowserRouter>
     </>

@@ -7,6 +7,13 @@ const Header = ({headertext}) => {
 
   const navigate = useNavigate();
   const [getRole,setRole,removeRole] = useLocalStorage("role")
+  const [getToken,setToken,removeToken] = useLocalStorage("token")
+
+  const handleLogout = () => {
+    removeRole();
+    removeToken();
+    navigate("/");
+  }
   const handleGoBack = () => {
     navigate(-1); // This navigates back one step in the history
   };
@@ -19,6 +26,9 @@ const Header = ({headertext}) => {
 
       
       <div className="text-lg font-semibold">{headertext}</div>
+      <button className="text-orange-primary font-bold text-xl" onClick={handleLogout}>
+              Logout
+      </button>{" "}
       <Link to={profileLink}>
       <button>
         <img
