@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { backendUrl, appendToUrl } from "../constants";
-import { insertData } from "../utils/insertUtils";
+import { appendToUrl, backendUrl } from "../constants";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { insertData } from "../utils/insertUtils";
 
 const AddProjectForm = () => {
   const [getLocalStorage, setLocalStorage, removeLocalStorage] =
@@ -67,7 +67,7 @@ const AddProjectForm = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-8 bg-orange-100 p-8 rounded-lg">
+    <div className="max-w-4xl mx-auto mt-8 bg-backg-light p-8 rounded-lg">
       <h1 className="text-2xl font-bold mb-4">Add Project</h1>
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-2 gap-4">
@@ -81,7 +81,7 @@ const AddProjectForm = () => {
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className="border border-red-500 rounded px-3 py-2 w-full"
+              className=" border-orange-primary border-2 rounded px-3 py-2 w-full"
             />
           </div>
           <div>
@@ -94,7 +94,7 @@ const AddProjectForm = () => {
               name="max_members"
               value={formData.max_members}
               onChange={handleChange}
-              className="border border-red-500 rounded px-3 py-2 w-full"
+              className=" border-orange-primary border-2 rounded px-3 py-2 w-full"
             />
           </div>
           <div>
@@ -107,7 +107,7 @@ const AddProjectForm = () => {
               name="start_date"
               value={formData.start_date}
               onChange={handleChange}
-              className="border border-red-500 rounded px-3 py-2 w-full"
+              className=" border-orange-primary border-2 rounded px-3 py-2 w-full"
             />
           </div>
           <div>
@@ -120,7 +120,7 @@ const AddProjectForm = () => {
               name="end_date"
               value={formData.end_date}
               onChange={handleChange}
-              className="border border-red-500 rounded px-3 py-2 w-full"
+              className=" border-orange-primary border-2 rounded px-3 py-2 w-full"
             />
           </div>
           <div className="col-span-2">
@@ -132,11 +132,11 @@ const AddProjectForm = () => {
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="border border-red-500 rounded px-3 py-2 w-full h-24"
+              className=" border-orange-primary border-2 rounded px-3 py-2 w-full h-24"
             ></textarea>
           </div>
           <div>
-            <label htmlFor="demoLink" className="block mb-1">
+            <label htmlFor="demoLink" className="">
               Demo Link:
             </label>
             <input
@@ -145,14 +145,14 @@ const AddProjectForm = () => {
               name="demo_link"
               value={formData.demo_link}
               onChange={handleChange}
-              className="border border-red-500 rounded px-3 py-2 w-full"
+              className=" border-orange-primary border-2 rounded px-3 py-2 w-full"
             />
           </div>
         </div>
         <div className="mt-4">
           <button
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="bg-orange-dark text-white w-full font-semibold px-4 py-2 rounded hover:bg-orange-dark"
           >
             Submit
           </button>

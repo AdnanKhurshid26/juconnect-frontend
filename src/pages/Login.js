@@ -1,8 +1,7 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-import { Link, useNavigate } from "react-router-dom";
-import { backendUrl, appendToUrl } from "../constants";
+import { useNavigate } from "react-router-dom";
+import { appendToUrl, backendUrl } from "../constants";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const Login = () => {
@@ -65,7 +64,7 @@ const Login = () => {
         <div className="p-2 w-full text-center bg-[#a18d8d] font-normal text-white text-xl px-2">
           Connect and Collaborate with ease
         </div>
-        <div className="px-8 flex flex-col gap-4 w-full">
+        <div className="px-8 flex flex-col gap-4 w-full lg:w-5/12 lg:items-center">
           <div className=" w-full flex flex-col gap-2 tracking-wider">
             <label className="text-lg font-semibold text-neutral-600 ">
               Roll

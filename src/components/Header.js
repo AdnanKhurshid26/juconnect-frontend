@@ -26,10 +26,11 @@ const Header = ({headertext}) => {
 
       
       <div className="text-lg font-semibold">{headertext}</div>
+      
+      <Link to={profileLink} className="flex flex-row justify-center items-center gap-4">
       <button className="text-orange-primary font-bold text-xl" onClick={handleLogout}>
               Logout
       </button>{" "}
-      <Link to={profileLink}>
       <button>
         <img
           src={require("../assets/james.jpg")}

@@ -42,7 +42,7 @@ const NotificationCard = (props) => {
 
   return (
     <div
-      className={`border-b-2 border-neutral-300 p-2 flex flex-row gap-2 justify-between items-center ${
+      className={`border-b-2 border-neutral-300 p-4 flex flex-row gap-2 justify-between items-center   lg:w-6/12 rounded-md  ${
         !data.seen && "bg-backg-light"
       }`}
       onClick = {() => navigate(`/project/${data.project_id}`)}
@@ -50,16 +50,19 @@ const NotificationCard = (props) => {
       <img
         src={require("../assets/james.jpg")}
         alt=""
-        className="h-10 w-auto rounded-full"
+        className="h-16 w-auto rounded-full"
       />
-      <div className="w-10/12 text-orange-dark flex flex-col">
-        <div className="w-full">
+      <div className="w-10/12 text-orange-dark flex flex-col gap-4">
+        <div className="w-full flex flex-row justify-between items-center ">
+          <div>
+
           <span className="text-lg font-semibold">{data.requestNotif ? data.from_name:data.to_name}</span>{" "}
           {data.requestNotif
             ? "Has invited you to join their project"
             : "Has been invited to join your project"}
-          {data.requestNotif &&(
-            <button className="text-white mt-2 bg-orange-primary  py-1 flex flex-row gap-1 items-center justify-center text-base font-semibold rounded-md"
+            </div>
+                      {data.requestNotif &&(
+            <button className="text-white mt-2 bg-orange-primary  py-1 px-2 flex flex-row gap-1 items-center justify-center text-base font-semibold rounded-md"
             onClick={acceptNotification}>Accept</button>
           )}
         </div>

@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { FaPen } from "react-icons/fa6";
-import { MdDescription } from "react-icons/md";
-import { IoMdAddCircleOutline } from "react-icons/io";
 import { CgEditBlackPoint } from "react-icons/cg";
+import { MdDescription } from "react-icons/md";
 // import Gallery from "../components/Gallery";
-import Progress from "../components/Progress";
-import Participant from "../components/Participant";
+import { useLocation, useParams } from "react-router-dom";
 import Header from "../components/Header";
-import Navbar from "../components/Navbar";
-import ProjectCard from "../components/ProjectCard";
 import Links from "../components/Links";
-import { useParams,useLocation } from "react-router-dom";
-import { useLocalStorage } from "../hooks/useLocalStorage";
-import { backendUrl, appendToUrl } from "../constants";
-import { insertData } from "../utils/insertUtils";
 import LoadingScreen from "../components/LoadingScreen";
+import Navbar from "../components/Navbar";
+import Participant from "../components/Participant";
+import Progress from "../components/Progress";
+import { appendToUrl, backendUrl } from "../constants";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { insertData } from "../utils/insertUtils";
 
 const DisplayProject = () => {
   const { id } = useParams();
@@ -111,8 +108,8 @@ const DisplayProject = () => {
   return (
     <div>
       <Header headertext="Project" />
-      <div className="min-h-screen flex flex-col p-2 gap-2 w-full">
-        <div className="flex flex-col gap-2 border-2 border-slate-200 rounded-md">
+      <div className="min-h-screen flex flex-col p-2 gap-2 w-full lg:items-center">
+        <div className="flex flex-col gap-2 border-2 border-slate-200 rounded-md lg:w-6/12">
           <div className="flex flex-row w-full p-4  gap-5 bg-orange-primary rounded-t-md text-white ">
             <div className="flex flex-col gap-3">
               <img

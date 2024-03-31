@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       <Header headertext="Home" />
-      <div className="p-2 flex flex-col gap-4">
+      <div className="p-2 flex flex-col gap-4  lg:items-center">
         <ProjectCard />
         <ProjectCard />
         <ProjectCard />

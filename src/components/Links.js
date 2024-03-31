@@ -4,10 +4,10 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import React, { useState } from "react";
-import { IoMdAddCircleOutline } from "react-icons/io";
 import { FaLink } from "react-icons/fa";
+import { IoMdAddCircleOutline } from "react-icons/io";
+import { appendToUrl, backendUrl } from "../constants";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import { backendUrl, appendToUrl } from "../constants";
 
 const Links = (props) => {
   const links = props.links;
@@ -119,7 +119,7 @@ const Links = (props) => {
               key={index}
               className="flex flex-row justify-between items-center gap-5"
             >
-              <div className="flex flex-row gap-1">
+              <div className="flex flex-row gap-3 justify-center items-center">
                 <FaLink className="text-orange-primary" />
                 <div className="text-lg font-semibold">
                   <a target="_blank" href={item.link}>

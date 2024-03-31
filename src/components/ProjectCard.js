@@ -1,7 +1,6 @@
 import React from "react";
-import { IoMdAddCircleOutline } from "react-icons/io";
-import { dummyProjectData } from "../constants";
 import { useNavigate } from "react-router-dom";
+import { dummyProjectData } from "../constants";
 
 const ProjectCard = (props) => {
   console.log(props.data)
@@ -18,7 +17,7 @@ const ProjectCard = (props) => {
     data = dummyProjectData[0];
   }
   return (
-    <div className="flex flex-col bg-orange-dark p-4 rounded-md gap-3 text-white w-full min-w-80" onClick={()=>{navigate(`/project/${props.id}`,{state:{notMember:props.notMember}})}}>
+    <div className="flex flex-col bg-orange-dark p-4 rounded-md gap-3 text-white w-full h-36 lg:w-4/12 min-w-80" onClick={()=>{navigate(`/project/${props.id}`,{state:{notMember:props.notMember}})}}>
       <div className="flex flex-row gap-2 items-center justify-center ">
         <div className="flex flex-col gap-0">
           <div className="text-md">{data.title}</div>

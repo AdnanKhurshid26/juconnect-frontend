@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import NotificationCard from "../components/NotificationCard";
+import { appendToUrl, backendUrl } from "../constants";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import { backendUrl, appendToUrl } from "../constants";
 const Notifications = () => {
   const [getLocalStorage, setLocalStorage, removeLocalStorage] =
     useLocalStorage("token");
@@ -83,12 +83,12 @@ const Notifications = () => {
     return (
       <div>
         <Header headertext="Notifications" />
-        <div className="flex flex-row justify-between items-center w-full border-b border-neutral-300 px-4 py-2 bg-white">
+        <div className="flex flex-row justify-between items-center w-full lg:w-6/12 border-b border-neutral-300 px-4 py-2 bg-white">
           <div></div>
           <div className="text-lg font-semibold">Received Notifications</div>
           <div></div>
         </div>
-        <div className="min-h-screen flex flex-col w-full">
+        <div className="min-h-screen flex flex-col w-full  lg:w-6/12 ">
           <div className="flex justify-center items-center h-20">
             <div className="text-lg font-semibold">No Notifications</div>
           </div>
@@ -115,7 +115,7 @@ const Notifications = () => {
     <div>
       <Header headertext="Notifications" />
       {receivedNotifs.length > 0 && (
-        <div className="flex flex-row justify-between items-center w-full border-b border-neutral-300 px-4 py-2 bg-white">
+        <div className="flex flex-row justify-between items-center w-full  border-b border-neutral-300 px-4 py-2 bg-white">
           <div></div>
           <div className="text-lg font-semibold">Received Notifications</div>
           <div></div>
@@ -123,7 +123,7 @@ const Notifications = () => {
       )}
 
       {receivedNotifs.length > 0 && (
-        <div className="min-h-screen flex flex-col w-full">
+        <div className="min-h-screen flex flex-col w-full lg:items-center ">
           {receivedNotifs.map((notif, index) => (
             <NotificationCard key={index} data={notif} removeReceiveNotifFromList={removeReceiveNotifFromList}/>
           ))}

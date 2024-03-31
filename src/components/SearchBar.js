@@ -3,7 +3,7 @@ import { IoSearch } from "react-icons/io5";
 
 const SearchBar = () => {
   return (
-    <div className="flex flex-col gap-2 sticky bg-white top-16 p-3">
+    <div className="flex flex-col gap-2 sticky bg-white top-16 p-3 lg:w-6/12 ">
       <div className="flex flex-row justify-between items-center w-full ">
         <input
           type="text"
