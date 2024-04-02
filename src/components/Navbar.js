@@ -50,7 +50,7 @@ const Navbar = () => {
       >
         <IoMdNotificationsOutline className="w-full h-10" />
       </Link>
-      <Link to='/add-project'
+      <Link to='/create-project'
         className={`w-full ${
           hoveredIcon === "message" ? "text-red-primary" : ""
         } `}

@@ -9,7 +9,9 @@ const Header = ({headertext}) => {
   const [getRole,setRole,removeRole] = useLocalStorage("role")
   const [getToken,setToken,removeToken] = useLocalStorage("token")
 
-  const handleLogout = () => {
+  const handleLogout = (event) => {
+    //stop onclick propagation
+    event.stopPropagation();
     removeRole();
     removeToken();
     navigate("/");
@@ -27,7 +29,7 @@ const Header = ({headertext}) => {
       
       <div className="text-lg font-semibold">{headertext}</div>
       
-      <Link to={profileLink} className="flex flex-row justify-center items-center gap-4">
+      <div className="flex flex-row justify-center items-center gap-4">
       <button className="text-orange-primary font-bold text-xl" onClick={handleLogout}>
               Logout
       </button>{" "}
@@ -36,9 +38,10 @@ const Header = ({headertext}) => {
           src={require("../assets/james.jpg")}
           alt=""
           className="h-10 w-auto rounded-full"
+          onClick={()=>{navigate(profileLink)}}
         />
       </button>
-      </Link>
+      </div>
       
     </div>
   );

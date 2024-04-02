@@ -4,11 +4,14 @@ import Navbar from "../components/Navbar";
 import NotificationCard from "../components/NotificationCard";
 import { appendToUrl, backendUrl } from "../constants";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import Spinner from "../components/Spinner";
+
 const Notifications = () => {
   const [getLocalStorage, setLocalStorage, removeLocalStorage] =
     useLocalStorage("token");
 
   const token = getLocalStorage();
+  const [loading, setLoading] = useState(true);
   const [receivedNotifs, setReceivedNotifs] = useState([]);
   const [sentNotifs, setSentNotifs] = useState([]);
 
@@ -66,9 +69,12 @@ const Notifications = () => {
     promiseList.push(getReceivedNotifs());
     promiseList.push(getSentNotifs());
 
-    Promise.all(promiseList).then(() =>
+    Promise.all(promiseList).then(() =>{
       console.log("All Notifications Fetched")
+      setLoading(false);
+    }
     );
+
   }, []);
 
   function removeReceiveNotifFromList(id){
@@ -79,16 +85,31 @@ const Notifications = () => {
     setSentNotifs(sentNotifs.filter((notif) => notif.id !== id));
   }
 
+  if(loading){
+    return (
+      <div>
+        <Header headertext="Notifications" />
+        <div className="min-h-screen flex flex-col w-full">
+          <div className="flex justify-center items-center h-20">
+            <Spinner />
+          </div>
+        </div>
+        <Navbar />
+      </div>
+    )
+  }
+
   if (receivedNotifs.length === 0 && sentNotifs.length === 0) {
     return (
       <div>
         <Header headertext="Notifications" />
-        <div className="flex flex-row justify-between items-center w-full lg:w-6/12 border-b border-neutral-300 px-4 py-2 bg-white">
+        <div className="flex flex-row justify-between items-center w-full border-b border-neutral-300 px-4 py-2 sticky bg-white">
           <div></div>
           <div className="text-lg font-semibold">Received Notifications</div>
           <div></div>
         </div>
-        <div className="min-h-screen flex flex-col w-full  lg:w-6/12 ">
+
+        <div className="min-h-screen flex flex-col w-full">
           <div className="flex justify-center items-center h-20">
             <div className="text-lg font-semibold">No Notifications</div>
           </div>
@@ -139,7 +160,7 @@ const Notifications = () => {
       )}
 
       {sentNotifs.length > 0 && (
-        <div className="min-h-screen flex flex-col w-full">
+        <div className="min-h-screen flex flex-col w-full lg:items-center ">
           {sentNotifs.map((notif, index) => (
             <NotificationCard key={index} data={notif} />
           ))}

@@ -14,7 +14,7 @@ const UnauthorizedPage = () => {
         <h2 className="text-2xl mb-4 text-center text-red-500">Unauthorized Access</h2>
         <p className="text-center mb-6">You are not logged in</p>
         <button 
-          className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded w-full md:w-auto"
+          className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded w-full"
           onClick={redirectToHome}
         >
           Go to Home Page

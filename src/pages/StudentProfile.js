@@ -45,11 +45,20 @@ const StudentProfile = () => {
   }, []);
 
   async function addProfessionalInterest() {
-    const data = {
-      professional_interest_name: inputProfessionalInterest,
-    };
 
     try {
+      const allInterestStrings = professionalInterests.map(
+        (interest) => interest.name
+      );
+
+      allInterestStrings.push(inputProfessionalInterest);
+
+      const interests = allInterestStrings.join(" ");
+
+      const data = {
+        professional_interest_name: inputProfessionalInterest,
+        interests: interests
+      };
       const responseData = await insertData(
         data,
         appendToUrl(

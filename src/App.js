@@ -17,29 +17,52 @@ import UnauthorizedPage from "./pages/Unauthorized";
 import { verifyToken } from "./utils/verify";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 function App() {
-
-  function ProtectedRoute(element){
-    return verifyToken() ? element : <UnauthorizedPage/>
+  function ProtectedRoute({ element }) {
+    return verifyToken() ? element : <UnauthorizedPage />;
   }
 
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login/>}></Route>
-          <Route path="/home" element={ProtectedRoute(<Home/>)}></Route>
-          <Route path="/student-profile" element={ProtectedRoute(<StudentProfile/>)}></Route>
-          <Route path="/notifications" element={ProtectedRoute(<Notifications/>)}></Route>
-          <Route path="/search" element={ProtectedRoute(<Search/>)}></Route>
-          <Route path="/create-project" element={ProtectedRoute(<CreateProject/>)}></Route>
-          <Route path="/signup" element={<SignUp/>}></Route>
-          <Route path="/otp" element={<OtpPage/>}></Route>
-          <Route path="/project/:id" element={ProtectedRoute(<DisplayProject/>)}></Route>
-          <Route path="/faculty-login" element={<FacultyLogin/>}></Route>
-          <Route path="/faculty-signup" element={<FacultySignup/>}></Route>
-          <Route path="/faculty-profile" element={ProtectedRoute(<FacultyProfile/>)}></Route>
-          <Route path="/student-profile-view/:email" element={ProtectedRoute(<StudentProfileView/>)}></Route>
-          <Route path="/faculty-profile-view/:email" element={ProtectedRoute(<FacultyProfileView/>)}></Route>
+          <Route path="/" element={<Login />} />
+          <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
+          <Route
+            path="/student-profile"
+            element={<ProtectedRoute element={<StudentProfile />} />}
+          />
+          <Route
+            path="/notifications"
+            element={<ProtectedRoute element={<Notifications />} />}
+          />
+          <Route
+            path="/search"
+            element={<ProtectedRoute element={<Search />} />}
+          />
+          <Route
+            path="/create-project"
+            element={<ProtectedRoute element={<CreateProject />} />}
+          />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/otp" element={<OtpPage />} />
+          <Route
+            path="/project/:id"
+            element={<ProtectedRoute element={<DisplayProject />} />}
+          />
+          <Route path="/faculty-login" element={<FacultyLogin />} />
+          <Route path="/faculty-signup" element={<FacultySignup />} />
+          <Route
+            path="/faculty-profile"
+            element={<ProtectedRoute element={<FacultyProfile />} />}
+          />
+          <Route
+            path="/student-profile-view/:email"
+            element={<ProtectedRoute element={<StudentProfileView />} />}
+          />
+          <Route
+            path="/faculty-profile-view/:email"
+            element={<ProtectedRoute element={<FacultyProfileView />} />}
+          />
         </Routes>
       </BrowserRouter>
     </>

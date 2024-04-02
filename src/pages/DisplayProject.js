@@ -19,7 +19,7 @@ const DisplayProject = () => {
   // console.log(id)
   const getDateStringFromISO = (date) => {
     const d = new Date(date);
-    return `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}`;
+    return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
   };
 
   const [getLocalStorage, setLocalStorage, removeLocalStorage] =
@@ -59,11 +59,17 @@ const DisplayProject = () => {
   }, []);
 
   async function addTag() {
+    //get concatenated string of all tags as well as input tag
+    const allTags = tags.map((tag) => tag.name);
+    allTags.push(inputTag);
+
+    const tagString = allTags.join(" ");
+
     const data = {
       tag_name: inputTag,
       project_id: Number.parseInt(id),
+      tag_string: tagString,
     };
-
     try {
       const responseData = await insertData(
         data,

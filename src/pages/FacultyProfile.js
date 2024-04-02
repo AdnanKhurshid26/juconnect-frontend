@@ -84,11 +84,19 @@ const FacultyProfile = () => {
   }
 
   async function addResearchInterest() {
-    const data = {
-      research_interest_name: inputResearchInterest,
-    };
 
     try {
+
+      const allInterestString = researchInterests.map((interest) => interest.name);
+      allInterestString.push(inputResearchInterest);
+
+      const interestString = allInterestString.join(" ");
+
+      const data = {
+        research_interest_name: inputResearchInterest,
+        interests: interestString,
+      };
+  
       const responseData = await insertData(
         data,
         appendToUrl(

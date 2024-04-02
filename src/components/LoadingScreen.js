@@ -10,7 +10,7 @@ const LoadingScreen = () => {
         alignItems: 'center',
         height: '100vh',
         width: '100%',
-        backgroundColor: 'rgba(100, 100, 100, 0.5)' /* Red color with some transparency */
+        backgroundColor: 'rgba(0, 0, 0, 0.5)' /* Red color with some transparency */
       }}
     >
       <Oval

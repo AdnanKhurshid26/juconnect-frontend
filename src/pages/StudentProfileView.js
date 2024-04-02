@@ -55,9 +55,9 @@ const StudentProfileView = () => {
   return (
     <div>
       <Header headertext="Student Profile" />
-      <div className="min-h-screen flex flex-col p-2 gap-2 w-full">
-        <div className="flex flex-col gap-2 border-2 border-slate-200 rounded-md">
-          <div className="flex flex-row w-full p-4  gap-5 bg-orange-primary rounded-t-md text-white ">
+      <div className="min-h-screen flex flex-col p-2 gap-2 w-full lg:items-center">
+        <div className="flex flex-col gap-2 border-2 border-slate-200 rounded-md lg:w-6/12">
+          <div className="flex flex-row w-full  p-4  gap-5 bg-orange-primary rounded-t-md text-white ">
             <div className="flex flex-col gap-3">
               <button className="px-2 py-1 border-white rounded-md bg-white text-orange-primary border flex flex-row items-center justify-center gap-2 font-semibold invisible">
                 {" "}
@@ -107,7 +107,7 @@ const StudentProfileView = () => {
             )}
           </div>
         </div>
-        <div className="flex flex-col gap-2 border w-full">
+        <div className="flex flex-col gap-2 border w-full  lg:w-6/12">
           <p className="text-2xl font-semibold">Projects created</p>
           <div className="flex flex-row overflow-scroll w-full gap-2">
             {Object.keys(studentProfile).length > 0 &&
@@ -116,7 +116,7 @@ const StudentProfileView = () => {
               ))}
           </div>
         </div>
-        <div className="flex flex-col gap-2 border w-full">
+        <div className="flex flex-col gap-2 border w-full  lg:w-6/12">
           <p className="text-2xl font-semibold">Projects joined</p>
           <div className="flex flex-row overflow-scroll w-full gap-2">
             {Object.keys(studentProfile).length > 0 &&
