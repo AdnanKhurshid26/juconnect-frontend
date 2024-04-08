@@ -10,9 +10,44 @@ const Search = () => {
   const [getLocalStorage, setLocalStorage, removeLocalStorage] =
     useLocalStorage("token");
 
+  const [searchValue, setSearchValue] = useState("");
   const token = getLocalStorage();
   const [loading, setLoading] = useState(true);
   const [searchedProjects, setSearchedProjects] = useState([]);
+
+  const handleChange = (e) => {
+    setSearchValue(e.target.value);
+  }
+
+  const handleSearch = async () => {
+    setLoading(true);
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+      body: JSON.stringify({
+        search: searchValue,
+      }),
+    };
+
+    const response = await fetch(
+      appendToUrl(backendUrl, `project/search`),
+      options
+    );
+    if (response.ok) {
+      const data = await response.json();
+      setSearchedProjects(data);
+      setSearchValue("");
+      setLoading(false);
+    }
+
+    else{
+      window.alert("No projects found");
+      setSearchValue("");
+    }
+  }
 
   useEffect(() => {
     async function getProjects() {
@@ -43,7 +78,7 @@ const Search = () => {
       <div>
         <Header headertext="Search" />
         <div className="w-full flex flex-col items-center justify-center">
-        <SearchBar />
+        <SearchBar/>
         <div className="min-h-screen grid grid-cols-2 w-full lg:w-6/12 gap-2  p-2">
           <Spinner />
         </div>
@@ -57,7 +92,7 @@ const Search = () => {
       <Header headertext="Search" />
 
       <div className="w-full flex flex-col items-center justify-center">
-        <SearchBar />
+        <SearchBar value={searchValue} onSearchChange={handleChange} onSearchClick={handleSearch}/>
         <div className="min-h-screen grid grid-cols-2 w-full lg:w-6/12 gap-2  p-2">
           {searchedProjects.map((project) => (
             <ProjectCard
