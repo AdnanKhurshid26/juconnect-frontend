@@ -12,6 +12,7 @@ import Progress from "../components/Progress";
 import { appendToUrl, backendUrl } from "../constants";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { insertData } from "../utils/insertUtils";
+import ExpandableInput from "../components/ExpandableInput";
 
 const DisplayProject = () => {
   const { id } = useParams();
@@ -151,7 +152,7 @@ const DisplayProject = () => {
 
             <div className="flex flex-col gap-1">
               <p className="text-2xl font-semibold ">
-              <input
+              <ExpandableInput
                   value={project.title}
                   className={
                     "bg-transparent " + (editable ? "" : "focus:outline-none")
@@ -160,11 +161,11 @@ const DisplayProject = () => {
                   onChange={(event) => {
                     setProject({ ...project, title: event.target.value });
                   }}
-                ></input>
+                />
               </p>
               <div className="flex flex-row gap-1 justify-start items-center">
                 <MdDescription />{" "}
-                <input
+                <ExpandableInput
                   value={project.description}
                   className={
                     "bg-transparent " + (editable ? "" : "focus:outline-none")
@@ -173,7 +174,7 @@ const DisplayProject = () => {
                   onChange={(event) => {
                     setProject({ ...project, description: event.target.value });
                   }}
-                ></input>
+                />
               </div>
               <div className="flex flex-row gap-1 justify-start items-center">
                 <CgEditBlackPoint />

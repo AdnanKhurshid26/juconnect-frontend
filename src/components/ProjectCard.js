@@ -2,6 +2,20 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { dummyProjectData } from "../constants";
 
+function truncateDescription(description, maxLength) {
+  if (description.length <= maxLength) {
+    return description;
+  }
+  
+  const words = description.split(' ');
+  let truncatedDescription = words.slice(0, maxLength).join(' ');
+  
+  // Append "..." at the end
+  truncatedDescription += '...';
+  
+  return truncatedDescription;
+}
+
 const ProjectCard = (props) => {
   console.log(props.data)
   const getDateStringFromISO = (date) => {
@@ -24,7 +38,7 @@ const ProjectCard = (props) => {
         </div>
       </div>
       <div className=" font-semibold">
-        {data.description}
+        {truncateDescription(data.description, 7)}
       </div>
       <div className="flex flex-row justify-between items-center gap-3">
         {/* <button className="bg-white text-orange-primary border w-5/12 border-white px-2 py-1 flex flex-row gap-1 items-center justify-center text-lg font-bold rounded-md">
