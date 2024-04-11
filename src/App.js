@@ -17,6 +17,7 @@ import FacultyProfileView from "./pages/FacultyProfileView";
 import UnauthorizedPage from "./pages/Unauthorized";
 import { verifyToken } from "./utils/verify";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import UpdateProject from "./pages/UpdateProject";
 function App() {
   function ProtectedRoute({ element }) {
     return verifyToken() ? element : <UnauthorizedPage />;
@@ -44,6 +45,10 @@ function App() {
           <Route
             path="/create-project"
             element={<ProtectedRoute element={<CreateProject />} />}
+          />
+          <Route
+            path="/update-project"
+            element={<ProtectedRoute element={<UpdateProject />} />}
           />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/otp" element={<OtpPage />} />

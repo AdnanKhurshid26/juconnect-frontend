@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CgEditBlackPoint } from "react-icons/cg";
 import { MdDescription } from "react-icons/md";
 // import Gallery from "../components/Gallery";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Links from "../components/Links";
 import LoadingScreen from "../components/LoadingScreen";
@@ -17,6 +17,7 @@ import ExpandableInput from "../components/ExpandableInput";
 const DisplayProject = () => {
   const { id } = useParams();
   const {state} = useLocation();
+  const navigate = useNavigate();
   // console.log(id)
   const getDateStringFromISO = (date) => {
     const d = new Date(date);
@@ -116,7 +117,7 @@ const DisplayProject = () => {
     <div>
       <Header headertext="Project" />
       <div className="min-h-screen flex flex-col p-2 gap-2 w-full lg:items-center">
-        <div className="flex flex-col gap-2 border-2 border-slate-200 rounded-md lg:w-6/12">
+        <div className="flex flex-col gap-2 border-2 border-slate-200 rounded-md lg:w-10/12">
           <div className="flex flex-row w-full p-4  gap-5 bg-orange-primary rounded-t-md text-white ">
             <div className="flex flex-col gap-3">
               <img
@@ -142,6 +143,7 @@ const DisplayProject = () => {
                       }
                       let edit = editable;
                       setEditable(!edit);
+                      // navigate('/update-project',{state: { data: project }}); //Migrate project updation using this
                     }}
                   >
                     {editable ? "Save" : "Edit"}
@@ -163,18 +165,27 @@ const DisplayProject = () => {
                   }}
                 />
               </p>
-              <div className="flex flex-row gap-1 justify-start items-center">
-                <MdDescription />{" "}
-                <ExpandableInput
-                  value={project.description}
-                  className={
-                    "bg-transparent " + (editable ? "" : "focus:outline-none")
-                  }
-                  readOnly={!editable}
-                  onChange={(event) => {
-                    setProject({ ...project, description: event.target.value });
-                  }}
-                />
+              <div className="flex flex-row gap-1 justify-start items-center w-100 overflow-hidden">
+                  {/* <MdDescription />{" "} */}
+                  <p className={
+                      "whitespace-normal bg-transparent " + (editable ? "" : "focus:outline-none")
+                    }
+                    readOnly={!editable}
+                    onChange={(event) => {
+                      setProject({ ...project, description: event.target.value });
+                    }}
+                  >{project.description}
+                  {/* <ExpandableInput
+                    value={project.description}
+                    className={
+                      "bg-transparent " + (editable ? "" : "focus:outline-none")
+                    }
+                    readOnly={!editable}
+                    onChange={(event) => {
+                      setProject({ ...project, description: event.target.value });
+                    }}
+                  /> */}
+                </p>
               </div>
               <div className="flex flex-row gap-1 justify-start items-center">
                 <CgEditBlackPoint />
