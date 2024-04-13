@@ -17,12 +17,12 @@ const Navbar = () => {
 
   return (
     <div className="bottom-0 w-full border-t-2 h-16 border-gray-400 bg-white z-10 flex flex-row gap-4 justify-center items-center p-3 sticky">
-      <Link className="w-full" to='/home'>
+      <Link className="w-full" to='/home2'>
         <button
           className={`w-full ${
             hoveredIcon === "home" ? "text-red-primary" : ""
           } ${
-            pathName === "/home" ? "text-orange-primary" : ""
+            pathName === "/home2" ? "text-orange-primary" : ""
           }`}
           onMouseEnter={() => handleIconHover("home")}
         >

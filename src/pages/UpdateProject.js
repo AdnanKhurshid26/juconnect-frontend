@@ -11,7 +11,9 @@ const UpdateProject = () => {
   return (
     <div>
         <Header headertext="Update Project" />
+        <div className="min-h-screen flex flex-col">
         <UpdateProjectForm project= {project} />
+        </div>
         <Navbar />
     </div>
   );

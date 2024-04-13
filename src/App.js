@@ -23,6 +23,31 @@ function App() {
     return verifyToken() ? element : <UnauthorizedPage />;
   }
 
+  // const [recommendations, setRecommendations] = useState([]);
+
+  // useEffect(() => {
+  //   async function getProjects() {
+  //     const options = {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `${token}`,
+  //       },
+  //     };
+
+  //     const response = await fetch(
+  //       appendToUrl(backendUrl, "project/recommendation"),
+  //       options
+  //     );
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       setRecommendations(data);
+  //       console.log(data);
+  //     }
+  //   }
+
+  //   getProjects().then(() => console.log("Projects Fetched"));
+  // }, []);
   return (
     <>
       <BrowserRouter>

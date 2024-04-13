@@ -134,16 +134,16 @@ const DisplayProject = () => {
                 Join <IoMdAddCircleOutline />
               </button> */}
               {project.editable && (
-                <div className="flex flex-row gap-5 items-center justify-center">
+                <div className="flex flex-row gap-5 itemxs-center justify-center">
                   <button
                     className="text-white mt-2 bg-red-primary py-1  text-base font-semibold rounded-md w-1/2"
                     onClick={() => {
-                      if(editable){
-                        updateProject();
-                      }
-                      let edit = editable;
-                      setEditable(!edit);
-                      // navigate('/update-project',{state: { data: project }}); //Migrate project updation using this
+                      // if(editable){
+                      //   updateProject();
+                      // }
+                      // let edit = editable;
+                      // setEditable(!edit);
+                      navigate('/update-project',{state: { data: project }}); //Migrate project updation using this
                     }}
                   >
                     {editable ? "Save" : "Edit"}
@@ -152,9 +152,10 @@ const DisplayProject = () => {
               )}
             </div>
 
-            <div className="flex flex-col gap-1">
-              <p className="text-2xl font-semibold ">
-              <ExpandableInput
+            <div className="flex flex-col gap-1 w-90 overflow-hidden">
+              <p className="text-2xl font-semibold whitespace-normal bg-transparent">
+                {project.title}
+              {/* <ExpandableInput
                   value={project.title}
                   className={
                     "bg-transparent " + (editable ? "" : "focus:outline-none")
@@ -163,9 +164,9 @@ const DisplayProject = () => {
                   onChange={(event) => {
                     setProject({ ...project, title: event.target.value });
                   }}
-                />
+                /> */}
               </p>
-              <div className="flex flex-row gap-1 justify-start items-center w-100 overflow-hidden">
+              <div className="flex flex-row gap-1 justify-start items-center w-90 overflow-hidden">
                   {/* <MdDescription />{" "} */}
                   <p className={
                       "whitespace-normal bg-transparent " + (editable ? "" : "focus:outline-none")

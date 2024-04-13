@@ -45,6 +45,7 @@ const AddProjectForm = () => {
     if (response.ok) {
       console.log(response);
       // Reset form fields
+      window.alert("Project added successfully");
       setFormData({
         title: "",
         max_members: "",

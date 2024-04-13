@@ -1,8 +1,10 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import ProjectCard from "../components/ProjectCard";
 import image from "../assets/james.jpg";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { appendToUrl, backendUrl } from "../constants";
 
 const collaborators = [
 
@@ -57,7 +59,43 @@ const collaborators = [
     },
   ]
 
-const Home2 = () => {
+const Home2 = (props) => {
+    const [recommendations, setRecommendations] = useState([]);
+    const [getLocalStorage, setLocalStorage, removeLocalStorage] = useLocalStorage("token");
+    const token = getLocalStorage();
+
+    const [recentProjects, setRecentProjects] = useState([]);
+
+    useEffect(() => {
+      async function getProjects() {
+        const options = {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+        };
+        
+        let promiseArray  = [];
+        promiseArray.push(fetch(appendToUrl(backendUrl, "project/recommendation"),options));
+        promiseArray.push(fetch(appendToUrl(backendUrl, "project/most_recent"),options));
+
+        const responses = await Promise.all(promiseArray);
+
+        if (responses[0].ok) {
+            const data = await responses[0].json();
+            setRecommendations(data);
+            console.log(data);
+            }
+        if (responses[1].ok) {
+            const data = await responses[1].json();
+            setRecentProjects(data);
+            console.log(data);
+            }   
+      }
+  
+      getProjects().then(() => console.log("Projects Fetched"));
+    }, []);
   return (
     <div className="min-h-screen flex flex-col p-2 gap-2 w-full lg:items-center">
       <Header headertext="Home" />
@@ -143,8 +181,16 @@ const Home2 = () => {
 <div className="mx-auto flex max-w-7xl px-4 sm:px-4 lg:px-6">
     <div className="mx-auto max-w-2xl py-6 sm:py-10 lg:max-w-none lg:py-22">
         <h2 className="text-2xl font-bold text-gray-900">Recent Projects</h2>
-
         <div className="mt-6 gap-4 space-y-12 lg:grid lg:grid-cols-4 lg:gap-x-6 lg:space-y-0">
+        {recentProjects.map((recommendation) => (
+            <div className="group-relative">
+            <div className="relative h-60 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-50">
+                <ProjectCard data={recommendation} id={recommendation.id}/>
+            </div>
+        </div>
+            ))}
+        </div>
+        {/* <div className="mt-6 gap-4 space-y-12 lg:grid lg:grid-cols-4 lg:gap-x-6 lg:space-y-0">
             <div className="group-relative">
                 <div className="relative h-60 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-50">
                     <ProjectCard/>
@@ -178,23 +224,24 @@ const Home2 = () => {
                 </div>
             </div>
                 
-        </div>
+        </div> */}
     </div>
 </div>
 
 <div className="mx-auto max-w-7xl px-4 sm:px-4 lg:px-6">
     <div className="mx-auto max-w-2xl py-6 sm:py-6 lg:max-w-none lg:py-22">
         <h2 className="text-2xl font-bold text-gray-900">Recommended Projects</h2>
-
         <div className="mt-6 space-y-12 lg:grid lg:grid-cols-4 lg:gap-x-6 lg:space-y-0">
+        {recommendations.map((recommendation) => (
             <div className="group-relative">
-                <div className="relative h-60 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-50">
-                    <ProjectCard/>
-                    <h3 className="mt-4 text-sm text-gray-500">
-                    <p className="text-base font-semibold text-gray-900">Contributors:</p>
-                    </h3>
-                </div>
+            <div className="relative h-60 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-50">
+                <ProjectCard data={recommendation} id={recommendation.id}/>
             </div>
+        </div>
+            ))}
+        </div>
+
+        {/* <div className="mt-6 space-y-12 lg:grid lg:grid-cols-4 lg:gap-x-6 lg:space-y-0">
             <div className="group-relative">
                 <div className="relative h-60 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-50">
                     <ProjectCard/>
@@ -220,7 +267,7 @@ const Home2 = () => {
                 </div>
             </div>
                 
-        </div>
+        </div> */}
     </div>
 </div>
 

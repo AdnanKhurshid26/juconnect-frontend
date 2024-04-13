@@ -34,18 +34,18 @@ const ProjectCard = (props) => {
     <div className="flex flex-col bg-orange-dark p-4 rounded-md gap-3 text-white w-full h-36 lg:w-4/12 min-w-80" onClick={()=>{navigate(`/project/${props.id}`,{state:{notMember:props.notMember}})}}>
       <div className="flex flex-row gap-2 items-center justify-center ">
         <div className="flex flex-col gap-0">
-          <div className="text-md">{data.title}</div>
+          <div className="text-md">{truncateDescription(data.title,4)}</div>
         </div>
       </div>
       <div className=" font-semibold">
         {truncateDescription(data.description, 7)}
       </div>
-      <div className="flex flex-row justify-between items-center gap-3">
+      <div className="flex flex-row justify-between items-center gap-1">
         {/* <button className="bg-white text-orange-primary border w-5/12 border-white px-2 py-1 flex flex-row gap-1 items-center justify-center text-lg font-bold rounded-md">
             <IoMdAddCircleOutline className="font-bold"/>
             Join
         </button> */}
-        <div className="italic">{getDateStringFromISO(data.start_date)}</div>
+        {/* <div className="italic">{getDateStringFromISO(data.start_date)}</div> */}
       </div>
     </div>
   );

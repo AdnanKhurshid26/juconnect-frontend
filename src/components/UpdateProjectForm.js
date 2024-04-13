@@ -2,18 +2,21 @@ import React, { useState } from "react";
 import { appendToUrl, backendUrl } from "../constants";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { insertData } from "../utils/insertUtils";
-
+import { useNavigate } from "react-router-dom";
 const UpdateProjectForm = ({ project: updateProj }) => {
   
   const [getLocalStorage, setLocalStorage, removeLocalStorage] =
     useLocalStorage("token");
   const token = getLocalStorage();
 
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     title: updateProj.title,
     max_members: updateProj.max_members,
     description: updateProj.description,
     demo_link: updateProj.demo_link,
+    id: updateProj.id,
   });
 
 //   async function updateProject(){
@@ -46,10 +49,64 @@ const UpdateProjectForm = ({ project: updateProj }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleUpdate = (e) => {
-    console.log('update');
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    if(formData.title===""||formData.max_members===""||formData.description===""){
+      window.alert("Please fill all the fields");
+      return;
+    }
+
+    const project = {
+      title: formData.title,
+      max_members: parseInt(formData.max_members),
+      description: formData.description,
+      demo_link: formData.demo_link,
+      id: formData.id,
+    };
+
+    const response = await updateProject(project);
+
+    if (response.ok) {
+      console.log(response);
+      // Reset form fields
+      window.alert("Project updated successfully");
+      navigate(-1)
+      setFormData({
+        title: "",
+        max_members: "",
+        description: "",
+        demo_link: "",
+      });
+    }
+
+    else {
+      window.alert("Error in updating project");
+      setFormData({
+        title: "",
+        max_members: "",
+        description: "",
+        demo_link: "",
+      });
+    }
     return;
   };
+
+  async function updateProject(project){
+    const options = {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+      body: JSON.stringify(project),
+    };
+    const response = await fetch(
+      appendToUrl(backendUrl, `project`),
+      options
+    );
+
+    return response;
+  }
 
 
 

@@ -10,8 +10,10 @@ export async function insertData(data,url,token){
     
     const response = await fetch(url, options);
     const returnData = await response.json();
+    returnData.ok = response.ok;
     if (response.ok) {
         console.log(data)
+
     }
     return returnData;
 }
