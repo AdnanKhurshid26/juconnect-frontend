@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CgEditBlackPoint } from "react-icons/cg";
 import { MdDescription } from "react-icons/md";
-// import Gallery from "../components/Gallery";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Links from "../components/Links";
