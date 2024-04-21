@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import ProjectCard from "../components/ProjectCard";
@@ -6,10 +6,12 @@ import SearchBar from "../components/SearchBar";
 import { appendToUrl, backendUrl } from "../constants";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import Spinner from "../components/Spinner";
+import { GlobalContext } from "../context/GlobalContext";
 const Search = () => {
   const [getLocalStorage, setLocalStorage, removeLocalStorage] =
     useLocalStorage("token");
 
+  const {globalState, setGlobalState} = useContext(GlobalContext);
   const [searchValue, setSearchValue] = useState("");
   const token = getLocalStorage();
   const [loading, setLoading] = useState(true);
@@ -68,10 +70,17 @@ const Search = () => {
         setSearchedProjects(data);
         console.log(data);
         setLoading(false);
+        setGlobalState({...globalState, recommended:data});
       }
     }
 
+    if(!globalState.recommended){
     getProjects().then(() => console.log("Projects Fetched"));
+    }
+    else{
+      setSearchedProjects(globalState.recommended);
+      setLoading(false);
+    }
   }, []);
   if(loading){
     return (

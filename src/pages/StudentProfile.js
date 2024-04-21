@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import { FaLocationDot, FaPen } from "react-icons/fa6";
 import { IoMdSchool } from "react-icons/io";
 import Achievements from "../components/Achievements";
+import Certifications from "../components/Certifications";
 import Experience from "../components/Experience";
 import Header from "../components/Header";
 import LoadingScreen from "../components/LoadingScreen";
@@ -10,12 +11,13 @@ import ProjectCard from "../components/ProjectCard";
 import { appendToUrl, backendUrl } from "../constants";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { insertData } from "../utils/insertUtils";
-import Certifications from "../components/Certifications";
-import Links from "../components/Links";
+import { GlobalContext } from "../context/GlobalContext";
 
 const StudentProfile = () => {
   const [getLocalStorage, setLocalStorage, removeLocalStorage] =
     useLocalStorage("token");
+
+  const {globalState, setGlobalState} = useContext(GlobalContext);
   const token = getLocalStorage();
   const [studentProfile, setStudentProfile] = useState({});
   console.log(token);
@@ -39,11 +41,18 @@ const StudentProfile = () => {
         const data = await response.json();
         console.log(data);
         setStudentProfile(data);
+        setGlobalState({...globalState, profile:data});
         setProfessionalInterests(data.student_profile.professional_interests);
       }
     }
 
+    if(!globalState.profile){
     getStudentProfile().then(() => console.log("Student Profile Fetched"));
+    }
+    else{
+      setStudentProfile(globalState.profile);
+      setProfessionalInterests(globalState.profile.student_profile.professional_interests);
+    }
   }, []);
 
   async function addProfessionalInterest() {

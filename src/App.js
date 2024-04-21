@@ -18,6 +18,7 @@ import UnauthorizedPage from "./pages/Unauthorized";
 import { verifyToken } from "./utils/verify";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import UpdateProject from "./pages/UpdateProject";
+import { GlobalProvider } from "./context/GlobalContext";
 function App() {
   function ProtectedRoute({ element }) {
     return verifyToken() ? element : <UnauthorizedPage />;
@@ -49,7 +50,7 @@ function App() {
   //   getProjects().then(() => console.log("Projects Fetched"));
   // }, []);
   return (
-    <>
+    <GlobalProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -97,7 +98,7 @@ function App() {
           />
         </Routes>
       </BrowserRouter>
-    </>
+    </GlobalProvider>
   );
 }
 
