@@ -10,6 +10,8 @@ import ProjectCard from "../components/ProjectCard";
 import { appendToUrl, backendUrl } from "../constants";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { insertData } from "../utils/insertUtils";
+import Certifications from "../components/Certifications";
+import Links from "../components/Links";
 
 const StudentProfile = () => {
   const [getLocalStorage, setLocalStorage, removeLocalStorage] =
@@ -130,7 +132,7 @@ const StudentProfile = () => {
               </div>
             )}
             <div
-              className="bg-orange-500 text-white-500 font-medium px-1 rounded flex items-center justify-center"
+              className="bg-orange-500 text-white-500 font-medium cursor-pointer hover:cursor-pointer hover:transform hover:scale-105 px-1 rounded flex items-center justify-center"
               onClick={() => {
                 let add = toggleAdd;
 
@@ -159,11 +161,22 @@ const StudentProfile = () => {
                 achievements={studentProfile.student_profile.achievements}
               />
             )}
+            {Object.keys(studentProfile).length > 0 && (
+              <Certifications
+                certifications={studentProfile.student_profile.certifications}
+              />
+            )}
+
+            {/*------------------------ Insert social media links here -------------------*/}
+            {/* {Object.keys(studentProfile).length > 0 && (
+              <Links links="" editable="" id=""
+                 />
+            )} */}
           </div>
         </div>
         <div className="flex flex-col gap-2 border w-full  lg:w-6/12">
-          <p className="text-2xl font-semibold">Projects created by you</p>
-          <div className="flex flex-row overflow-scroll w-full gap-2">
+          <p className="text-2xl font-semibold pl-2">Projects created by you</p>
+          <div className="flex flex-row overflow-scroll w-full gap-3 p-3">
             {Object.keys(studentProfile).length > 0 &&
               studentProfile.created_projects.map((project) => (
                 <ProjectCard data={project} id={project.id} />
@@ -171,8 +184,8 @@ const StudentProfile = () => {
           </div>
         </div>
         <div className="flex flex-col gap-2 border w-full  lg:w-6/12">
-          <p className="text-2xl font-semibold">Projects joined</p>
-          <div className="flex flex-row overflow-scroll w-full gap-2">
+          <p className="text-2xl font-semibold pl-2">Projects joined</p>
+          <div className="flex flex-row overflow-scroll w-full gap-3 p-3">
             {Object.keys(studentProfile).length > 0 &&
               studentProfile.projects.map((project) => (
                 <ProjectCard data={project} id={project.id} />
