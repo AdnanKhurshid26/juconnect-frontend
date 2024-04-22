@@ -12,6 +12,9 @@ import { appendToUrl, backendUrl } from "../constants";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { insertData } from "../utils/insertUtils";
 import ExpandableInput from "../components/ExpandableInput";
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import { MdEdit } from "react-icons/md";
 
 const DisplayProject = () => {
   const { id } = useParams();
@@ -85,6 +88,10 @@ const DisplayProject = () => {
     }
   }
 
+  async function deleteTag(){
+    // ------------------Complete this function-------------------
+  };
+
   async function updateProject(){
     const options = {
       method: "PATCH",
@@ -121,7 +128,7 @@ const DisplayProject = () => {
             <div className="flex flex-col gap-3">
               <img
                 src={require("../assets/project.png")}
-                alt=""
+                alt="Project picture"
                 className="h-20 w-auto rounded-full"
               />
               {/* <button className="px-2 py-1 border-white rounded-md bg-white text-orange-primary border flex flex-row items-center justify-center gap-2 font-semibold">
@@ -133,9 +140,9 @@ const DisplayProject = () => {
                 Join <IoMdAddCircleOutline />
               </button> */}
               {project.editable && (
-                <div className="flex flex-row gap-5 itemxs-center justify-center">
+                <div className="flex flex-row gap-5 h-10 w-18 itemxs-center justify-center">
                   <button
-                    className="text-white mt-2 bg-red-primary py-1  text-base font-semibold rounded-md w-1/2"
+                    className="text-white mt-2 bg-red-primary py-1 px-1 w-auto hover:transform hover:scale-105 text-base font-semibold rounded-md"
                     onClick={() => {
                       // if(editable){
                       //   updateProject();
@@ -144,8 +151,10 @@ const DisplayProject = () => {
                       // setEditable(!edit);
                       navigate('/update-project',{state: { data: project }}); //Migrate project updation using this
                     }}
-                  >
-                    {editable ? "Save" : "Edit"}
+                  > <div style={{display: "flex", justifyContent: "center"}}>
+                    <MdEdit />
+                    <span>{editable ? "Save" : "Edit"}</span>
+                    </div>
                   </button>
                 </div>
               )}
@@ -193,7 +202,8 @@ const DisplayProject = () => {
               </div>
               <div className="flex flex-row gap-1 justify-start items-center">
                 <CgEditBlackPoint />
-                Maximum Participants: <input
+                Maximum Participants: {project.max_members}
+                {/* <input
                   type="number"
                   value={project.max_members}
                   className={
@@ -204,7 +214,7 @@ const DisplayProject = () => {
                     setProject({ ...project, max_members: Number.parseInt(event.target.value) });
                   }}>
                   
-                </input>
+                </input> */}
               </div>
               <div className="flex flex-row gap-1 justify-start items-center">
                 <CgEditBlackPoint />
@@ -213,16 +223,19 @@ const DisplayProject = () => {
             </div>
           </div>
           <div className="flex flex-wrap gap-1 p-2 text-sm">
+            <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
             {tags.map((tag, index) => {
               return (
-                <div
-                  key={index}
-                  className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center"
-                >
-                  {tag.name}
-                </div>
+                // <div
+                //   key={index}
+                //   className="bg-slate-100 text-neutral-500 font-medium relative h-10 w-15 px-1 rounded flex items-center justify-center"
+                // >
+                //   {tag.name}
+                // </div>
+                <Chip label={tag.name} key={index} variant="outlined" size="small" onDelete={deleteTag} />
               );
             })}
+            </Stack>
             {toggleAdd && (
               <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
                 <input
@@ -234,7 +247,7 @@ const DisplayProject = () => {
             )}
             {project.editable && (
               <div
-                className="bg-orange-500 text-white-500 font-medium px-1 rounded flex items-center justify-center"
+                className="bg-orange-500 text-white-500 font-medium text-bold cursor-pointer hover:cursor-pointer hover:transform hover:scale-105 px-1 rounded flex items-center justify-center"
                 onClick={() => {
                   let add = toggleAdd;
 

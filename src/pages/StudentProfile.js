@@ -12,6 +12,8 @@ import { appendToUrl, backendUrl } from "../constants";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { insertData } from "../utils/insertUtils";
 import { GlobalContext } from "../context/GlobalContext";
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
 
 const StudentProfile = () => {
   const [getLocalStorage, setLocalStorage, removeLocalStorage] =
@@ -88,6 +90,11 @@ const StudentProfile = () => {
       window.alert(e.message);
     }
   }
+
+  async function deleteInterest(){
+    // ------------------Complete this function-------------------
+  };
+
   if (Object.keys(studentProfile).length == 0) {
     return <LoadingScreen />;
   }
@@ -126,11 +133,14 @@ const StudentProfile = () => {
             </div>
           </div>
           <div className="flex flex-wrap gap-1 p-2 text-sm">
+            <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
             {professionalInterests.map((interest) => (
-              <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
-                {interest.name}
-              </div>
+              // <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
+              //   {interest.name}
+              // </div>
+              <Chip label={interest.name} variant="outlined" size="small" onDelete={deleteInterest} />
             ))}
+            </Stack>
             {toggleAdd && (
               <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
                 <input
