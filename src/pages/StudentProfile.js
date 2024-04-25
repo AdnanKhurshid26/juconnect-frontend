@@ -140,7 +140,6 @@ const StudentProfile = () => {
               // </div>
               <Chip label={interest.name} variant="outlined" size="small" onDelete={deleteInterest} />
             ))}
-            </Stack>
             {toggleAdd && (
               <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
                 <input
@@ -150,6 +149,7 @@ const StudentProfile = () => {
                 ></input>
               </div>
             )}
+            </Stack>
             <div
               className="bg-orange-500 text-white-500 font-medium cursor-pointer hover:cursor-pointer hover:transform hover:scale-105 px-1 rounded flex items-center justify-center"
               onClick={() => {
