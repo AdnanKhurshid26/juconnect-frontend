@@ -6,6 +6,7 @@ import image from "../assets/james.jpg";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { appendToUrl, backendUrl } from "../constants";
 import { GlobalContext } from "../context/GlobalContext";
+import { Link, useNavigate } from "react-router-dom";
 
 const collaborators = [
   {
@@ -64,8 +65,10 @@ const Home2 = (props) => {
   const [getLocalStorage, setLocalStorage, removeLocalStorage] =
     useLocalStorage("token");
   const token = getLocalStorage();
+  const navigate = useNavigate();
 
   const [recentProjects, setRecentProjects] = useState([]);
+  const [frequentCollaborators, setFrequentCollaborators] = useState([]);
 
   useEffect(() => {
     async function getProjects() {
@@ -85,6 +88,10 @@ const Home2 = (props) => {
         fetch(appendToUrl(backendUrl, "project/most_recent"), options)
       );
 
+      promiseArray.push(
+        fetch(appendToUrl(backendUrl, "project/most_frequent"), options)
+      );
+
       const responses = await Promise.all(promiseArray);
 
       if (responses[0].ok) {
@@ -97,16 +104,40 @@ const Home2 = (props) => {
         setRecentProjects(data);
         setGlobalState({ ...globalState, recent: data });
       }
+
+      if (responses[2].ok) {
+        const data = await responses[2].json();
+        console.log(data)
+        for(let element of data){
+          element.description = element.role;
+          element.imageSrc = image;
+          element.imageAlt = "profile pic";
+        }
+        setFrequentCollaborators(data);
+        setGlobalState({ ...globalState, frequent: data });
+        // setRecentProjects(data);
+        // setGlobalState({ ...globalState, recent: data });
+      }
     }
 
-    if (!globalState.recommended || !globalState.recent) {
+    if (!globalState.recommended || !globalState.recent || !globalState.frequent) {
       getProjects().then(() => console.log("Projects Fetched"));
     } else {
       console.log("globalstated")
       setRecommendations(globalState.recommended);
       setRecentProjects(globalState.recent);
+      setFrequentCollaborators(globalState.frequent);
     }
   }, []);
+
+  function navigateHandler(item) {
+    console.log(item)
+    if (item.role === "Student") {
+      navigate(`/student-profile-view/${item.email}`);
+    } else if (item.role === "Faculty") {
+      navigate(`/faculty-profile-view/${item.email}`);
+    }
+  }
   return (
     <div className="min-h-screen flex flex-col p-2 gap-2 w-full lg:items-center">
       <Header headertext="Home" />
@@ -141,7 +172,7 @@ const Home2 = (props) => {
           <div className="mt-6 gap-4 space-y-12 lg:grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-4 lg:space-y-0">
             {recentProjects.map((recommendation) => (
               <div className="group-relative">
-                <div className="relative h-60 w-3/4 overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-50">
+                <div className="relative h-60 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-50">
                   <ProjectCard data={recommendation} id={recommendation.id} />
                 </div>
               </div>
@@ -193,8 +224,8 @@ const Home2 = (props) => {
           <div className="mt-6 space-y-12 lg:grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-4 md:gap-x-2 sm:gap-x-2 lg:space-y-0">
             {recommendations.map((recommendation) => (
               <div className="group-relative">
-                <div className="relative h-60 w-3/4 overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-50">
-                  <ProjectCard data={recommendation} id={recommendation.id} />
+                <div className="relative h-60 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-50">
+                  <ProjectCard data={recommendation} id={recommendation.id} notMember={true} />
                 </div>
               </div>
             ))}
@@ -236,9 +267,9 @@ const Home2 = (props) => {
         </h2>
 
         <div className="grid grid-cols-5 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 xl:gap-x-8">
-          {collaborators.map((collaborator) => (
-            <a key={collaborator.id} href={collaborator.href} className="group">
-              <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+          {frequentCollaborators.map((collaborator) => (
+            <a key={collaborator.id}  className="group" onClick={()=>navigateHandler(collaborator)}>
+              <div  className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
                 <img
                   src={collaborator.imageSrc}
                   alt={collaborator.imageAlt}

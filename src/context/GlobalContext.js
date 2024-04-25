@@ -7,6 +7,7 @@ const GlobalProvider = ({ children }) => {
         profile:null,
         recommended:null,
         recent:null,
+        frequent:null,
     });
 
     return (
