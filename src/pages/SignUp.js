@@ -52,7 +52,7 @@ const SignUp = () => {
         <div className="p-2 w-full text-center bg-[#a18d8d] font-normal text-white text-xl px-2">
           Connect and Collaborate with ease
         </div>
-        <div className="px-8 flex flex-col gap-4 w-full">
+        <div className="px-8 flex flex-col gap-4 w-full lg:w-5/12 lg:items-center">
           <div className=" w-full flex flex-col gap-2 tracking-wider">
             <label className="text-lg font-semibold text-neutral-600 ">
               Roll
