@@ -10,6 +10,8 @@ import Publications from "../components/Publications";
 import { appendToUrl, backendUrl } from "../constants";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { insertData } from "../utils/insertUtils";
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
 
 const FacultyProfile = () => {
   const [getLocalStorage, setLocalStorage, removeLocalStorage] =
@@ -46,8 +48,12 @@ const FacultyProfile = () => {
     getFacultyProfile().then(() => console.log("Faculty Profile Fetched"));
   }, []);
 
-  async function updateProfile(){
-    if(facultyProfile.name.length == 0 || facultyProfile.designation.length == 0 || facultyProfile.department.length == 0){
+  async function updateProfile() {
+    if (
+      facultyProfile.name.length == 0 ||
+      facultyProfile.designation.length == 0 ||
+      facultyProfile.department.length == 0
+    ) {
       window.alert("Please fill all the fields");
       return;
     }
@@ -68,26 +74,22 @@ const FacultyProfile = () => {
         body: JSON.stringify(data),
       };
 
-      const response = await fetch(
-        appendToUrl(backendUrl, "profile"),
-        options
-      );
+      const response = await fetch(appendToUrl(backendUrl, "profile"), options);
 
       if (response.ok) {
         const responseData = await response.json();
         window.alert(responseData.message);
       }
-
     } catch (e) {
       window.alert(e.message);
     }
   }
 
   async function addResearchInterest() {
-
     try {
-
-      const allInterestString = researchInterests.map((interest) => interest.name);
+      const allInterestString = researchInterests.map(
+        (interest) => interest.name
+      );
       allInterestString.push(inputResearchInterest);
 
       const interestString = allInterestString.join(" ");
@@ -96,7 +98,7 @@ const FacultyProfile = () => {
         research_interest_name: inputResearchInterest,
         interests: interestString,
       };
-  
+
       const responseData = await insertData(
         data,
         appendToUrl(
@@ -111,6 +113,39 @@ const FacultyProfile = () => {
         ...researchInterests,
         { name: inputResearchInterest },
       ]);
+    } catch (e) {
+      window.alert(e.message);
+    }
+  }
+
+  async function deleteInterest(interestName) {
+    const deleteInterest = interestName;
+    //do not include deleteTag
+    console.log(deleteInterest);
+    const allInterestStrings = researchInterests.map(
+      (interest) => interest.name
+    );
+    const index = allInterestStrings.indexOf(deleteInterest);
+    allInterestStrings.splice(index, 1);
+    researchInterests.splice(index, 1);
+
+    const interests = allInterestStrings.join(" ");
+    const data = {
+      research_interest_name: deleteInterest,
+      interests: interests,
+    };
+    try {
+      const responseData = await insertData(
+        data,
+        appendToUrl(
+          backendUrl,
+          "user/research_interests/delete_research_interest_name"
+        ),
+        token
+      );
+      window.alert(responseData.message);
+
+      setResearchInterests([...researchInterests]);
     } catch (e) {
       window.alert(e.message);
     }
@@ -170,7 +205,7 @@ const FacultyProfile = () => {
               </div>
               <div className="flex flex-row gap-1 justify-start items-center">
                 <IoMdSchool />
-                
+
                 <ExpandableInput
                   value={facultyProfile.designation}
                   className={
@@ -211,10 +246,11 @@ const FacultyProfile = () => {
             </div>
           </div>
           <div className="flex flex-wrap gap-1 p-2 text-sm">
-            {researchInterests.map((interest) => (
-              <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
-                {interest.name}
-              </div>
+          {researchInterests.map((interest) => (
+              // <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
+              //   {interest.name}
+              // </div>
+              <Chip label={interest.name} variant="outlined" size="small" onDelete={()=>{deleteInterest(interest.name)}} />
             ))}
             {toggleAdd && (
               <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
@@ -250,7 +286,9 @@ const FacultyProfile = () => {
             <Achievements achievements={achievements} />
             <Publications publications={publications}/> */}
 
-            <Publications publications={facultyProfile.faculty_profile.publications} />
+            <Publications
+              publications={facultyProfile.faculty_profile.publications}
+            />
           </div>
         </div>
         <div className="flex flex-col gap-2 border w-full lg:w-6/12">
