@@ -138,10 +138,10 @@ const Home2 = (props) => {
       <div className="mx-auto flex max-w-7xl px-4 sm:px-4 lg:px-6">
         <div className="mx-auto max-w-2xl py-6 sm:py-10 lg:max-w-none lg:py-22">
           <h2 className="text-2xl font-bold text-gray-900">Recent Projects</h2>
-          <div className="mt-6 gap-4 space-y-12 lg:grid lg:grid-cols-4 lg:gap-x-6 lg:space-y-0">
+          <div className="mt-6 gap-4 space-y-12 lg:grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-4 lg:space-y-0">
             {recentProjects.map((recommendation) => (
               <div className="group-relative">
-                <div className="relative h-60 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-50">
+                <div className="relative h-60 w-3/4 overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-50">
                   <ProjectCard data={recommendation} id={recommendation.id} />
                 </div>
               </div>
@@ -190,10 +190,10 @@ const Home2 = (props) => {
           <h2 className="text-2xl font-bold text-gray-900">
             Recommended Projects
           </h2>
-          <div className="mt-6 space-y-12 lg:grid lg:grid-cols-4 lg:gap-x-6 lg:space-y-0">
+          <div className="mt-6 space-y-12 lg:grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-4 md:gap-x-2 sm:gap-x-2 lg:space-y-0">
             {recommendations.map((recommendation) => (
               <div className="group-relative">
-                <div className="relative h-60 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-50">
+                <div className="relative h-60 w-3/4 overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-50">
                   <ProjectCard data={recommendation} id={recommendation.id} />
                 </div>
               </div>
@@ -256,8 +256,8 @@ const Home2 = (props) => {
         </div>
       </div>
 
-      <div className=" flex fixed right-0 top-1/2 transform -translate-y-1/2 gap-2 border lg:items-center justify-center rounded-md">
-        <div class="flex flex-col items-end pl-8 pr-4 py-3">
+      <div className="flex fixed right-0 top-1/2 transform -translate-y-1/2 h-4/5 w-1/7 pl-4 border overflow-y-scroll lg:items-center justify-center rounded-md">
+        <div class="flex flex-col pl-2 pr-2 py-2 my-3">
           <div class="w-full md:pl-2 xl:pl-1 hover:transform hover:scale-110 transition-transform">
             <div class="bg-green-600 border rounded shadow p-3">
               <div class="flex flex-col">
@@ -321,6 +321,19 @@ const Home2 = (props) => {
                 <div class="flex-1 text-center">
                   <h5 class="text-white">To Do List</h5>
                   <h3 class="text-white text-3xl">7</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-full pt-3  md:pl-2 xl:pl-1 hover:transform hover:scale-110 transition-transform">
+            <div class="bg-purple-600 border rounded shadow p-3">
+              <div class="flex flex-col items-center">
+                <div class="flex-shrink pl-1">
+                  <i class="fas fa-server fa-2x fa-fw fa-inverse"></i>
+                </div>
+                <div class="flex-1 text-center">
+                  <h5 class="text-white">New Notifications</h5>
+                  <h3 class="text-white text-3xl">2</h3>
                 </div>
               </div>
             </div>
