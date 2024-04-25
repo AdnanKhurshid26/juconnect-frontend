@@ -91,8 +91,36 @@ const StudentProfile = () => {
     }
   }
 
-  async function deleteInterest(){
-    // ------------------Complete this function-------------------
+  async function deleteInterest(interestName){
+      const deleteInterest = interestName;
+      //do not include deleteTag
+      console.log(deleteInterest);
+      const allInterestStrings = professionalInterests.map(
+        (interest) => interest.name
+      );
+      const index = allInterestStrings.indexOf(deleteInterest);
+      allInterestStrings.splice(index, 1);
+      professionalInterests.splice(index, 1);
+
+      const interests = allInterestStrings.join(" ");
+      const data = {
+        professional_interest_name: deleteInterest,
+        interests: interests,
+      };
+      try {
+        const responseData = await insertData(
+          data,
+          appendToUrl(backendUrl, "user/professional_interests/delete_professional_interest_name"),
+          token
+        );
+        window.alert(responseData.message);
+
+        setProfessionalInterests([
+          ...professionalInterests,
+        ]);
+      } catch (e) {
+        window.alert(e.message);
+      }
   };
 
   if (Object.keys(studentProfile).length == 0) {
@@ -138,9 +166,8 @@ const StudentProfile = () => {
               // <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
               //   {interest.name}
               // </div>
-              <Chip label={interest.name} variant="outlined" size="small" onDelete={deleteInterest} />
+              <Chip label={interest.name} variant="outlined" size="small" onDelete={()=>{deleteInterest(interest.name)}} />
             ))}
-            </Stack>
             {toggleAdd && (
               <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
                 <input
@@ -150,6 +177,7 @@ const StudentProfile = () => {
                 ></input>
               </div>
             )}
+            </Stack>
             <div
               className="bg-orange-500 text-white-500 font-medium cursor-pointer hover:cursor-pointer hover:transform hover:scale-105 px-1 rounded flex items-center justify-center"
               onClick={() => {

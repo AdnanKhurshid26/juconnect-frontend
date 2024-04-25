@@ -12,18 +12,18 @@ import { appendToUrl, backendUrl } from "../constants";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { insertData } from "../utils/insertUtils";
 import ExpandableInput from "../components/ExpandableInput";
-import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
+import Chip from "@mui/material/Chip";
+import Stack from "@mui/material/Stack";
 import { MdEdit } from "react-icons/md";
 
 const DisplayProject = () => {
   const { id } = useParams();
-  const {state} = useLocation();
+  const { state } = useLocation();
   const navigate = useNavigate();
   // console.log(id)
   const getDateStringFromISO = (date) => {
     const d = new Date(date);
-    return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+    return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
   };
 
   const [getLocalStorage, setLocalStorage, removeLocalStorage] =
@@ -88,11 +88,38 @@ const DisplayProject = () => {
     }
   }
 
-  async function deleteTag(){
+  async function deleteTag(tagName) {
     // ------------------Complete this function-------------------
-  };
+    if (project.editable) {
+      const deleteTag = tagName;
+      //do not include deleteTag
+      console.log(deleteTag);
+      const allTags = tags.map((tag) => tag.name);
+      const index = allTags.indexOf(deleteTag);
+      allTags.splice(index, 1);
 
-  async function updateProject(){
+      const tagString = allTags.join(" ");
+      const data = {
+        tag_name: deleteTag,
+        project_id: Number.parseInt(id),
+        tag_string: tagString,
+      };
+      try {
+        const responseData = await insertData(
+          data,
+          appendToUrl(backendUrl, "project/delete_tag_name"),
+          token
+        );
+        window.alert(responseData.message);
+
+        setTags([...tags, { name: inputTag }]);
+      } catch (e) {
+        window.alert(e.message);
+      }
+    }
+  }
+
+  async function updateProject() {
     const options = {
       method: "PATCH",
       headers: {
@@ -101,16 +128,12 @@ const DisplayProject = () => {
       },
       body: JSON.stringify(project),
     };
-    const response = await fetch(
-      appendToUrl(backendUrl, `project`),
-      options
-    );
+    const response = await fetch(appendToUrl(backendUrl, `project`), options);
     if (response.ok) {
       const data = await response.json();
       console.log(data);
       window.alert(data.message);
-    }
-    else{
+    } else {
       const data = await response.json();
       console.log(data);
       window.alert(data.message);
@@ -149,11 +172,13 @@ const DisplayProject = () => {
                       // }
                       // let edit = editable;
                       // setEditable(!edit);
-                      navigate('/update-project',{state: { data: project }}); //Migrate project updation using this
+                      navigate("/update-project", { state: { data: project } }); //Migrate project updation using this
                     }}
-                  > <div style={{display: "flex", justifyContent: "center"}}>
-                    <MdEdit />
-                    <span>{editable ? "Save" : "Edit"}</span>
+                  >
+                    {" "}
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                      <MdEdit />
+                      <span>{editable ? "Save" : "Edit"}</span>
                     </div>
                   </button>
                 </div>
@@ -163,7 +188,7 @@ const DisplayProject = () => {
             <div className="flex flex-col gap-1 w-90 overflow-hidden">
               <p className="text-2xl font-semibold whitespace-normal bg-transparent">
                 {project.title}
-              {/* <ExpandableInput
+                {/* <ExpandableInput
                   value={project.title}
                   className={
                     "bg-transparent " + (editable ? "" : "focus:outline-none")
@@ -175,15 +200,18 @@ const DisplayProject = () => {
                 /> */}
               </p>
               <div className="flex flex-row gap-1 justify-start items-center w-90 overflow-hidden">
-                  {/* <MdDescription />{" "} */}
-                  <p className={
-                      "whitespace-normal bg-transparent " + (editable ? "" : "focus:outline-none")
-                    }
-                    readOnly={!editable}
-                    onChange={(event) => {
-                      setProject({ ...project, description: event.target.value });
-                    }}
-                  >{project.description}
+                {/* <MdDescription />{" "} */}
+                <p
+                  className={
+                    "whitespace-normal bg-transparent " +
+                    (editable ? "" : "focus:outline-none")
+                  }
+                  readOnly={!editable}
+                  onChange={(event) => {
+                    setProject({ ...project, description: event.target.value });
+                  }}
+                >
+                  {project.description}
                   {/* <ExpandableInput
                     value={project.description}
                     className={
@@ -224,17 +252,32 @@ const DisplayProject = () => {
           </div>
           <div className="flex flex-wrap gap-1 p-2 text-sm">
             <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
-            {tags.map((tag, index) => {
-              return (
-                // <div
-                //   key={index}
-                //   className="bg-slate-100 text-neutral-500 font-medium relative h-10 w-15 px-1 rounded flex items-center justify-center"
-                // >
-                //   {tag.name}
-                // </div>
-                <Chip label={tag.name} key={index} variant="outlined" size="small" onDelete={deleteTag} />
-              );
-            })}
+              {tags.map((tag, index) => {
+                return (
+                  // <div
+                  //   key={index}
+                  //   className="bg-slate-100 text-neutral-500 font-medium relative h-10 w-15 px-1 rounded flex items-center justify-center"
+                  // >
+                  //   {tag.name}
+                  // </div>
+                  project.editable ? (
+                    <Chip
+                      label={tag.name}
+                      key={index}
+                      variant="outlined"
+                      size="small"
+                      onDelete={() => deleteTag(tag.name)}
+                    />
+                  ) : (
+                    <Chip
+                      label={tag.name}
+                      key={index}
+                      variant="outlined"
+                      size="small"
+                    />
+                  )
+                );
+              })}
             </Stack>
             {toggleAdd && (
               <div className="bg-slate-100 text-neutral-500 font-medium px-1 rounded flex items-center justify-center">
@@ -281,8 +324,12 @@ const DisplayProject = () => {
               id={id}
               editable={project.editable}
             />
-            
-            <Links links={project.project_links} editable={project.editable} id={id} />
+
+            <Links
+              links={project.project_links}
+              editable={project.editable}
+              id={id}
+            />
             {/* <Links links={links}/> */}
             {/* <Gallery/> */}
           </div>
