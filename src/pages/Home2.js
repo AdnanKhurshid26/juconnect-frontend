@@ -7,6 +7,8 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 import { appendToUrl, backendUrl } from "../constants";
 import { GlobalContext } from "../context/GlobalContext";
 import { Link, useNavigate } from "react-router-dom";
+import LoadingScreen from "../components/LoadingScreen";
+// import {fetchProfile} from "../utils/fetchProfile";
 
 const collaborators = [
   {
@@ -60,15 +62,44 @@ const collaborators = [
 ];
 
 const Home2 = (props) => {
+
   const { globalState, setGlobalState } = useContext(GlobalContext);
-  const [recommendations, setRecommendations] = useState([]);
   const [getLocalStorage, setLocalStorage, removeLocalStorage] =
     useLocalStorage("token");
   const token = getLocalStorage();
+  const [profile, setProfile] = useState(undefined);
+
+  const fetchProfile = async () => {
+  
+
+    async function getProfile() {
+        const options = {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+        };
+  
+        const response = await fetch(appendToUrl(backendUrl, "profile"), options);
+        if (response.ok) {
+          const data = await response.json();
+          setProfile(data);
+          setGlobalState({...globalState, profile:data});
+        }
+    }
+  
+    await getProfile();
+    return;
+  }
+
+
+  const [recommendations, setRecommendations] = useState(undefined);
   const navigate = useNavigate();
 
-  const [recentProjects, setRecentProjects] = useState([]);
-  const [frequentCollaborators, setFrequentCollaborators] = useState([]);
+  const [recentProjects, setRecentProjects] = useState(undefined);
+  const [frequentCollaborators, setFrequentCollaborators] = useState(undefined);
+
 
   useEffect(() => {
     async function getProjects() {
@@ -128,6 +159,13 @@ const Home2 = (props) => {
       setRecentProjects(globalState.recent);
       setFrequentCollaborators(globalState.frequent);
     }
+
+    if (!globalState.profile) {
+      fetchProfile().then(() => console.log("Profile Fetched"));
+    }
+    else{
+      setProfile(globalState.profile);
+    }
   }, []);
 
   function navigateHandler(item) {
@@ -137,6 +175,10 @@ const Home2 = (props) => {
     } else if (item.role === "Faculty") {
       navigate(`/faculty-profile-view/${item.email}`);
     }
+  }
+
+  if (!profile || !recommendations || !recentProjects || !frequentCollaborators) {
+    return <LoadingScreen />;
   }
   return (
     <div className="min-h-screen flex flex-col p-2 gap-2 w-full lg:items-center">
@@ -149,9 +191,9 @@ const Home2 = (props) => {
           class="w-20 h-20 rounded-full mr-4"
         />
         <div class="flex flex-col">
-          <h3 class="text-lg font-bold">{globalState.profile.name} Dashboard</h3>
-          <p class="text-gray-500">User Role: {globalState.profile.role}</p>
-          <p class="text-gray-500">User Email: {globalState.profile.email}</p>
+          <h3 class="text-lg font-bold">{profile.name} Dashboard</h3>
+          <p class="text-gray-500">User Role: {profile.role}</p>
+          <p class="text-gray-500">User Email: {profile.email}</p>
           <a href="/student-profile" class="text-gray-500 hover:underline">
             Profile Settings
           </a>

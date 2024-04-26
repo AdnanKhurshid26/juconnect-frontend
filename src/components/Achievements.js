@@ -34,7 +34,7 @@ const Achievements = (props) => {
     const year = d.getFullYear();
     const month = d.getMonth() + 1;
     const day = d.getDate();
-    return `${year}/${month}/${day}`;
+    return `${year}/${month}`;
   }
 
   return (
@@ -125,6 +125,10 @@ const Achievements = (props) => {
                 <div className="text-base">
                   {item.title}, {convertDateToString(item.date)} ,<a href={item.link}>Link</a>
                 </div>
+                <div className="text-base">
+                    {item.description}
+                  </div>
+                
               </div>
             </div>
           ))}

@@ -2,12 +2,14 @@ import React from "react";
 import { IoArrowBack } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { GlobalContext } from "../context/GlobalContext";
 
 const Header = ({headertext}) => {
 
   const navigate = useNavigate();
   const [getRole,setRole,removeRole] = useLocalStorage("role")
   const [getToken,setToken,removeToken] = useLocalStorage("token")
+  const {globalState,setGlobalState} = React.useContext(GlobalContext);
 
   const handleLogout = (event) => {
     //stop onclick propagation
@@ -15,6 +17,12 @@ const Header = ({headertext}) => {
     removeRole();
     removeToken();
     navigate("/");
+    setGlobalState({
+      profile:null,
+      recommended:null,
+      recent:null,
+      frequent:null,
+    });
   }
   const handleGoBack = () => {
     navigate(-1); // This navigates back one step in the history
