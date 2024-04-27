@@ -15,6 +15,7 @@ import ExpandableInput from "../components/ExpandableInput";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import { MdEdit } from "react-icons/md";
+import ImageCarousel from "../components/ImageCarousel";
 
 const DisplayProject = () => {
   const { id } = useParams();
@@ -139,6 +140,13 @@ const DisplayProject = () => {
       window.alert(data.message);
     }
   }
+
+  const imageHandler = (imageUrl)=>{
+    let newProject = {...project};
+    newProject.project_images.push({image_url:imageUrl});
+    setProject(newProject);
+  }
+  
   if (Object.keys(project).length === 0) {
     return <LoadingScreen />;
   }
@@ -330,6 +338,15 @@ const DisplayProject = () => {
               editable={project.editable}
               id={id}
             />
+
+            <div id="carousel-container">
+              <ImageCarousel
+                editable={project.editable}
+                id={id}
+                images={project.project_images}
+                imageUploadHandler={imageHandler}
+              />
+            </div>
             {/* <Links links={links}/> */}
             {/* <Gallery/> */}
           </div>
